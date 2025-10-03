@@ -217,9 +217,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function showNotification(message, type = 'info') {
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
+        const iconClass = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
         notification.innerHTML = `
             <div class="notification-content">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+                <i class="fas fa-${iconClass}"></i>
                 <span>${message}</span>
             </div>
         `;
@@ -533,6 +534,149 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize on page load
     checkAuth();
+
+    // Counter animation
+    function animateCounters() {
+        const counters = document.querySelectorAll('.stat-number[data-count]');
+        
+        counters.forEach(counter => {
+            const target = parseFloat(counter.getAttribute('data-count'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                if (target % 1 === 0) {
+                    counter.textContent = Math.floor(current);
+                } else {
+                    counter.textContent = current.toFixed(1);
+                }
+            }, 16);
+        });
+    }
+
+    // Email availability check
+    const emailInput = document.getElementById('email-username');
+    const checkEmailBtn = document.getElementById('check-email-btn');
+    
+    if (emailInput && checkEmailBtn) {
+        checkEmailBtn.addEventListener('click', function() {
+            const username = emailInput.value.trim();
+            
+            if (!username) {
+                showNotification('Введите желаемое имя пользователя', 'error');
+                return;
+            }
+            
+            if (!/^[a-zA-Z0-9._-]+$/.test(username)) {
+                showNotification('Имя пользователя может содержать только буквы, цифры, точки, дефисы и подчёркивания', 'error');
+                return;
+            }
+            
+            if (username.length < 3) {
+                showNotification('Имя пользователя должно содержать минимум 3 символа', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Проверка...';
+            this.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Simulate random availability
+                const isAvailable = Math.random() > 0.3;
+                
+                if (isAvailable) {
+                    showNotification(`Отлично! ${username}@mill-gov.ru доступен!`, 'success');
+                    emailInput.style.borderColor = '#28a745';
+                } else {
+                    showNotification(`К сожалению, ${username}@mill-gov.ru уже занят. Попробуйте другой вариант.`, 'error');
+                    emailInput.style.borderColor = '#ff6b6b';
+                }
+                
+                // Reset button
+                this.innerHTML = originalText;
+                this.disabled = false;
+            }, 1500);
+        });
+        
+        // Real-time validation
+        emailInput.addEventListener('input', function() {
+            const value = this.value;
+            const isValid = /^[a-zA-Z0-9._-]+$/.test(value) && value.length >= 3;
+            
+            if (value && !isValid) {
+                this.style.borderColor = '#ff6b6b';
+            } else if (value && isValid) {
+                this.style.borderColor = '#28a745';
+            } else {
+                this.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            }
+        });
+    }
+
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target.classList.contains('hero-stats')) {
+                    animateCounters();
+                }
+                
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    const animatedElements = document.querySelectorAll('.hero-stats, .showcase-item, .about-card, .feature-card, .news-card');
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+
+    // Parallax effect for floating cards
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const parallaxElements = document.querySelectorAll('.floating-card');
+        
+        parallaxElements.forEach((element, index) => {
+            const speed = 0.5 + (index * 0.1);
+            element.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+    });
+
+    // Add typing effect to hero title
+    const heroTitle = document.querySelector('.hero-title');
+    if (heroTitle) {
+        const titleLines = heroTitle.querySelectorAll('.title-line, .title-highlight');
+        titleLines.forEach((line, index) => {
+            line.style.opacity = '0';
+            line.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                line.style.transition = 'all 0.8s ease';
+                line.style.opacity = '1';
+                line.style.transform = 'translateY(0)';
+            }, index * 200);
+        });
+    }
 });
 
 // Add CSS for ripple effect
@@ -590,6 +734,10 @@ style.textContent = `
         border-left-color: #28a745;
     }
     
+    .notification-error {
+        border-left-color: #ff6b6b;
+    }
+    
     .notification-content {
         display: flex;
         align-items: center;
@@ -603,6 +751,10 @@ style.textContent = `
     
     .notification-success .notification-content i {
         color: #28a745;
+    }
+    
+    .notification-error .notification-content i {
+        color: #ff6b6b;
     }
     
     .field-error {

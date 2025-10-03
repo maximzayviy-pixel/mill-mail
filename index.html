@@ -68,18 +68,75 @@
 
     <!-- Hero Section -->
     <section class="hero">
+        <div class="hero-background">
+            <div class="hero-particles"></div>
+            <div class="hero-gradient"></div>
+        </div>
         <div class="container">
             <div class="hero-content">
-                <h2 class="hero-title">Получите профессиональную почту @mill-gov.ru</h2>
-                <p class="hero-subtitle">Современный email-сервис с красивым доменом для деловой переписки</p>
-                <div class="hero-buttons">
-                    <a href="#register" class="btn btn-primary">Зарегистрироваться</a>
-                    <a href="#features" class="btn btn-secondary">Узнать больше</a>
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i>
+                    <span>Новое поколение email-сервиса</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="title-line">Создайте свой</span>
+                    <span class="title-highlight">профессиональный email</span>
+                    <span class="title-line">@mill-gov.ru</span>
+                </h1>
+                <p class="hero-subtitle">Современный, безопасный и красивый email-сервис для профессионалов. Создайте свою уникальную страницу и начните общаться стильно.</p>
+                
+                <!-- Email Selection -->
+                <div class="email-selector">
+                    <div class="email-input-group">
+                        <input type="text" id="email-username" placeholder="ваше_имя" class="email-input">
+                        <span class="email-domain">@mill-gov.ru</span>
+                    </div>
+                    <button class="btn btn-primary btn-large" id="check-email-btn">
+                        <i class="fas fa-search"></i>
+                        Проверить доступность
+                    </button>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="12500">0</div>
+                        <div class="stat-label">Активных пользователей</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="99.9">0</div>
+                        <div class="stat-label">% Время работы</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="256">0</div>
+                        <div class="stat-label">Стран мира</div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="hero-bg">
-            <div class="hero-pattern"></div>
+            
+            <!-- Floating Cards -->
+            <div class="floating-cards">
+                <div class="floating-card card-1">
+                    <div class="card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Безопасность</h4>
+                    <p>256-bit шифрование</p>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="card-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h4>Скорость</h4>
+                    <p>Мгновенная доставка</p>
+                </div>
+                <div class="floating-card card-3">
+                    <div class="card-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h4>Дизайн</h4>
+                    <p>Персонализация</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -112,6 +169,107 @@
                     <h3>Удобство использования</h3>
                     <p>Современный интерфейс, доступ с любых устройств и интеграция с популярными почтовыми клиентами</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Showcase Section -->
+    <section class="profile-showcase">
+        <div class="container">
+            <div class="section-header">
+                <h2>Создайте свою уникальную страницу</h2>
+                <p>Каждый пользователь получает красивую персональную страницу вида mill-gov.ru/username</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="showcase-item">
+                    <div class="profile-preview">
+                        <div class="preview-header">
+                            <div class="preview-avatar">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Александр">
+                            </div>
+                            <div class="preview-info">
+                                <h3>Александр Петров</h3>
+                                <p>alexander@mill-gov.ru</p>
+                                <div class="preview-badges">
+                                    <span class="badge">Frontend Developer</span>
+                                    <span class="badge">Moscow</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="preview-content">
+                            <p>Создаю современные веб-приложения с использованием React и TypeScript. Увлекаюсь UI/UX дизайном.</p>
+                            <div class="preview-social">
+                                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-url">mill-gov.ru/alexander</div>
+                </div>
+                
+                <div class="showcase-item">
+                    <div class="profile-preview">
+                        <div class="preview-header">
+                            <div class="preview-avatar">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="Мария">
+                            </div>
+                            <div class="preview-info">
+                                <h3>Мария Сидорова</h3>
+                                <p>maria@mill-gov.ru</p>
+                                <div class="preview-badges">
+                                    <span class="badge">Marketing Manager</span>
+                                    <span class="badge">St. Petersburg</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="preview-content">
+                            <p>Специалист по digital-маркетингу с 5-летним опытом. Помогаю брендам расти в онлайн-пространстве.</p>
+                            <div class="preview-social">
+                                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-url">mill-gov.ru/maria</div>
+                </div>
+                
+                <div class="showcase-item">
+                    <div class="profile-preview">
+                        <div class="preview-header">
+                            <div class="preview-avatar">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="Дмитрий">
+                            </div>
+                            <div class="preview-info">
+                                <h3>Дмитрий Козлов</h3>
+                                <p>dmitry@mill-gov.ru</p>
+                                <div class="preview-badges">
+                                    <span class="badge">CEO & Founder</span>
+                                    <span class="badge">Novosibirsk</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="preview-content">
+                            <p>Основатель IT-стартапа. Создаю продукты, которые меняют мир к лучшему. Инвестор и ментор.</p>
+                            <div class="preview-social">
+                                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-medium"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-url">mill-gov.ru/dmitry</div>
+                </div>
+            </div>
+            
+            <div class="showcase-cta">
+                <h3>Создайте свою страницу за 2 минуты</h3>
+                <p>Добавьте фото, описание, ссылки на соц-сети и получите красивую персональную страницу</p>
+                <a href="#register" class="btn btn-primary btn-large">
+                    <i class="fas fa-plus"></i>
+                    Создать страницу
+                </a>
             </div>
         </div>
     </section>
