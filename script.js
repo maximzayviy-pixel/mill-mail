@@ -1,767 +1,667 @@
-// Smooth scrolling for navigation links
-document.addEventListener('DOMContentLoaded', function() {
-    // Smooth scrolling for anchor links
-    const navLinks = document.querySelectorAll('a[href^="#"]');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            
-            if (targetSection) {
-                const headerHeight = document.querySelector('.header').offsetHeight;
-                const targetPosition = targetSection.offsetTop - headerHeight - 20;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Add scroll effect to header
-    const header = document.querySelector('.header');
-    let lastScrollTop = 0;
-    
-    window.addEventListener('scroll', function() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (scrollTop > lastScrollTop && scrollTop > 100) {
-            // Scrolling down
-            header.style.transform = 'translateY(-100%)';
-        } else {
-            // Scrolling up
-            header.style.transform = 'translateY(0)';
-        }
-        
-        lastScrollTop = scrollTop;
-    });
-
-    // Add animation on scroll
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-
-    // Observe elements for animation
-    const animatedElements = document.querySelectorAll('.about-card, .link-card, .news-card');
-    animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
-
-    // Add hover effects to cards
-    const cards = document.querySelectorAll('.about-card, .link-card, .news-card');
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-
-    // Add click effect to buttons
-    const buttons = document.querySelectorAll('.btn, .link-btn');
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            // Create ripple effect
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.classList.add('ripple');
-            
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        });
-    });
-
-    // Add typing effect to hero title
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        const text = heroTitle.textContent;
-        heroTitle.textContent = '';
-        
-        let i = 0;
-        const typeWriter = () => {
-            if (i < text.length) {
-                heroTitle.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            }
+// ДИВЕРГЕНТ - Система разведки
+class DivergentSystem {
+    constructor() {
+        this.attemptsLeft = 3;
+        this.isLoggedIn = false;
+        this.map = null;
+        this.compass = {
+            degree: 0,
+            direction: 'Север'
+        };
+        this.database = [];
+        this.chats = {
+            current: 'Командный канал',
+            messages: []
         };
         
-        // Start typing effect after a short delay
-        setTimeout(typeWriter, 1000);
+        this.init();
     }
 
-    // Add parallax effect to hero section
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.5;
-            hero.style.transform = `translateY(${rate}px)`;
+    init() {
+        this.setupEventListeners();
+        this.simulateLoading();
+        this.loadDatabase();
+    }
+
+    simulateLoading() {
+        const loadingScreen = document.getElementById('loading-screen');
+        const progressBar = document.querySelector('.loading-progress');
+        const loadingText = document.querySelector('.loading-text');
+        
+        const loadingSteps = [
+            'Инициализация системы...',
+            'Загрузка модулей безопасности...',
+            'Подключение к спутникам...',
+            'Синхронизация базы данных...',
+            'Активация интерфейса...',
+            'Система готова к работе'
+        ];
+        
+        let step = 0;
+        const interval = setInterval(() => {
+            if (step < loadingSteps.length) {
+                loadingText.textContent = loadingSteps[step];
+                progressBar.style.width = `${((step + 1) / loadingSteps.length) * 100}%`;
+                step++;
+            } else {
+                clearInterval(interval);
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }, 500);
+            }
+        }, 500);
+    }
+
+    setupEventListeners() {
+        // Login
+        document.getElementById('login-btn').addEventListener('click', () => this.handleLogin());
+        document.getElementById('access-key').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.handleLogin();
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', () => this.handleLogout());
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => this.switchTab(e.currentTarget.dataset.tab));
+        });
+
+        // Map controls
+        document.getElementById('satellite-toggle').addEventListener('click', () => this.toggleMapLayer('satellite'));
+        document.getElementById('terrain-toggle').addEventListener('click', () => this.toggleMapLayer('terrain'));
+        document.getElementById('street-toggle').addEventListener('click', () => this.toggleMapLayer('street'));
+
+        // Scanner
+        document.getElementById('upload-file').addEventListener('click', () => this.uploadFile());
+        document.getElementById('camera-scan').addEventListener('click', () => this.cameraScan());
+
+        // Compass
+        document.getElementById('calibrate-compass').addEventListener('click', () => this.calibrateCompass());
+        document.getElementById('reset-compass').addEventListener('click', () => this.resetCompass());
+
+        // Database
+        document.getElementById('upload-database').addEventListener('click', () => this.uploadDatabase());
+        document.getElementById('database-search').addEventListener('input', (e) => this.searchDatabase(e.target.value));
+
+        // File uploads
+        document.getElementById('file-upload').addEventListener('change', (e) => this.handleFileUpload(e));
+        document.getElementById('database-upload').addEventListener('change', (e) => this.handleDatabaseUpload(e));
+
+        // Chat
+        document.querySelector('.btn-send').addEventListener('click', () => this.sendMessage());
+        document.querySelector('.chat-input input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.sendMessage();
         });
     }
 
-    // Add loading animation
-    window.addEventListener('load', function() {
-        document.body.classList.add('loaded');
-    });
+    handleLogin() {
+        const accessKey = document.getElementById('access-key').value;
+        const errorMessage = document.getElementById('login-error');
+        
+        if (!accessKey) {
+            this.showError('Введите ключ доступа');
+            return;
+        }
 
-    // Add development notice animation
-    const devNotice = document.querySelector('.dev-notice');
-    if (devNotice) {
+        // Simulate key validation
+        const validKeys = ['DIVERGENT2024', 'ACCESS123', 'SECRET_KEY', 'ADMIN'];
+        
+        if (validKeys.includes(accessKey.toUpperCase())) {
+            this.isLoggedIn = true;
+            this.showMainSystem();
+        } else {
+            this.attemptsLeft--;
+            document.getElementById('attempts-left').textContent = this.attemptsLeft;
+            
+            if (this.attemptsLeft <= 0) {
+                this.showError('Превышено количество попыток. IP заблокирован.');
+                this.blockAccess();
+            } else {
+                this.showError(`Неверный ключ. Осталось попыток: ${this.attemptsLeft}`);
+            }
+        }
+    }
+
+    showError(message) {
+        const errorMessage = document.getElementById('login-error');
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+        
+        setTimeout(() => {
+            errorMessage.style.display = 'none';
+        }, 3000);
+    }
+
+    blockAccess() {
+        document.querySelector('.login-form').innerHTML = `
+            <div class="blocked-message">
+                <i class="fas fa-ban"></i>
+                <h3>Доступ заблокирован</h3>
+                <p>Превышено количество попыток входа</p>
+                <p>Обратитесь к администратору системы</p>
+            </div>
+        `;
+    }
+
+    showMainSystem() {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('main-system').style.display = 'flex';
+        this.initializeMap();
+        this.initializeCompass();
+        this.startCompassSimulation();
+    }
+
+    handleLogout() {
+        this.isLoggedIn = false;
+        document.getElementById('main-system').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('access-key').value = '';
+        this.attemptsLeft = 3;
+        document.getElementById('attempts-left').textContent = this.attemptsLeft;
+    }
+
+    switchTab(tabName) {
+        // Update navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+        // Update content
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+
+        // Initialize specific tab
+        if (tabName === 'map' && !this.map) {
+            this.initializeMap();
+        }
+    }
+
+    // Map Functions
+    initializeMap() {
+        if (this.map) return;
+
+        this.map = L.map('map').setView([55.7558, 37.6176], 10);
+
+        // Add satellite layer
+        this.satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Satellite imagery'
+        });
+
+        // Add street layer
+        this.streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'OpenStreetMap'
+        });
+
+        // Add terrain layer
+        this.terrainLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            attribution: 'OpenTopoMap'
+        });
+
+        // Start with satellite
+        this.satelliteLayer.addTo(this.map);
+
+        // Update coordinates on move
+        this.map.on('mousemove', (e) => {
+            document.getElementById('lat').textContent = e.latlng.lat.toFixed(4);
+            document.getElementById('lng').textContent = e.latlng.lng.toFixed(4);
+        });
+
+        // Add some markers
+        this.addMapMarkers();
+    }
+
+    addMapMarkers() {
+        const markers = [
+            { lat: 55.7558, lng: 37.6176, title: 'Центр Москвы', type: 'location' },
+            { lat: 55.7522, lng: 37.6156, title: 'Красная площадь', type: 'landmark' },
+            { lat: 55.7512, lng: 37.6184, title: 'Кремль', type: 'landmark' }
+        ];
+
+        markers.forEach(marker => {
+            const icon = L.divIcon({
+                className: 'custom-marker',
+                html: `<div class="marker-${marker.type}"><i class="fas fa-${marker.type === 'location' ? 'map-marker-alt' : 'building'}"></i></div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+
+            L.marker([marker.lat, marker.lng], { icon })
+                .addTo(this.map)
+                .bindPopup(marker.title);
+        });
+    }
+
+    toggleMapLayer(layerType) {
+        // Remove all layers
+        this.map.removeLayer(this.satelliteLayer);
+        this.map.removeLayer(this.streetLayer);
+        this.map.removeLayer(this.terrainLayer);
+
+        // Update button states
+        document.querySelectorAll('.map-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Add selected layer
+        switch (layerType) {
+            case 'satellite':
+                this.satelliteLayer.addTo(this.map);
+                document.getElementById('satellite-toggle').classList.add('active');
+                break;
+            case 'street':
+                this.streetLayer.addTo(this.map);
+                document.getElementById('street-toggle').classList.add('active');
+                break;
+            case 'terrain':
+                this.terrainLayer.addTo(this.map);
+                document.getElementById('terrain-toggle').classList.add('active');
+                break;
+        }
+    }
+
+    // Compass Functions
+    initializeCompass() {
+        this.updateCompassDisplay();
+    }
+
+    startCompassSimulation() {
         setInterval(() => {
-            devNotice.style.animation = 'none';
-            setTimeout(() => {
-                devNotice.style.animation = 'pulse 2s infinite';
-            }, 10);
-        }, 5000);
+            if (this.isLoggedIn) {
+                // Simulate compass movement
+                this.compass.degree = (this.compass.degree + Math.random() * 2 - 1) % 360;
+                if (this.compass.degree < 0) this.compass.degree += 360;
+                
+                this.updateCompassDisplay();
+            }
+        }, 100);
     }
 
-    // Registration form handling
-    const registrationForm = document.querySelector('.form');
-    if (registrationForm) {
-        registrationForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+    updateCompassDisplay() {
+        const needle = document.getElementById('compass-needle');
+        const degree = document.getElementById('compass-degree');
+        const direction = document.getElementById('compass-direction');
+        const speed = document.getElementById('compass-speed');
+        const temp = document.getElementById('compass-temp');
+
+        if (needle) {
+            needle.style.transform = `translate(-50%, -100%) rotate(${this.compass.degree}deg)`;
+        }
+
+        if (degree) {
+            degree.textContent = `${Math.round(this.compass.degree)}°`;
+        }
+
+        if (direction) {
+            const directions = ['Север', 'Северо-восток', 'Восток', 'Юго-восток', 'Юг', 'Юго-запад', 'Запад', 'Северо-запад'];
+            const index = Math.round(this.compass.degree / 45) % 8;
+            direction.textContent = directions[index];
+        }
+
+        if (speed) {
+            speed.textContent = `${Math.round(Math.random() * 50)} км/ч`;
+        }
+
+        if (temp) {
+            temp.textContent = `${Math.round(15 + Math.random() * 15)}°C`;
+        }
+    }
+
+    calibrateCompass() {
+        this.compass.degree = 0;
+        this.updateCompassDisplay();
+        this.showNotification('Компас откалиброван', 'success');
+    }
+
+    resetCompass() {
+        this.compass.degree = 0;
+        this.updateCompassDisplay();
+        this.showNotification('Компас сброшен', 'info');
+    }
+
+    // Scanner Functions
+    uploadFile() {
+        document.getElementById('file-upload').click();
+    }
+
+    cameraScan() {
+        this.showNotification('Функция камеры будет доступна в следующей версии', 'info');
+    }
+
+    handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const previewArea = document.getElementById('preview-area');
+        const extractedText = document.getElementById('extracted-text');
+
+        // Show file info
+        previewArea.innerHTML = `
+            <i class="fas fa-file-alt"></i>
+            <p>Файл: ${file.name}</p>
+            <p>Размер: ${(file.size / 1024).toFixed(2)} KB</p>
+            <p>Тип: ${file.type}</p>
+        `;
+
+        // Simulate text extraction
+        this.extractTextFromFile(file, extractedText);
+    }
+
+    extractTextFromFile(file, outputElement) {
+        const reader = new FileReader();
+        
+        reader.onload = (e) => {
+            let text = '';
             
-            // Get form data
-            const formData = new FormData(this);
-            const username = formData.get('username');
-            const email = formData.get('email');
-            const fullname = formData.get('fullname');
-            const organization = formData.get('organization');
-            
-            // Show loading state
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
-            submitBtn.disabled = true;
-            
-            // Simulate form submission
+            if (file.type === 'text/plain') {
+                text = e.target.result;
+            } else if (file.type === 'application/pdf') {
+                text = 'PDF текст будет извлечен здесь...';
+            } else if (file.type.includes('image')) {
+                text = 'OCR распознавание текста с изображения...';
+            } else {
+                text = 'Обработка файла...';
+            }
+
+            outputElement.textContent = text;
+            this.searchInDatabase(text);
+        };
+
+        if (file.type === 'text/plain') {
+            reader.readAsText(file);
+        } else {
+            // Simulate processing for other file types
             setTimeout(() => {
-                // Show success message
-                showNotification('Заявка отправлена! Мы свяжемся с вами в ближайшее время.', 'success');
-                
-                // Reset form
-                this.reset();
-                
-                // Reset button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
+                outputElement.textContent = 'Извлеченный текст из документа...\n\nЭто пример извлеченного текста для демонстрации работы системы сканирования документов.';
+                this.searchInDatabase('извлеченный текст');
             }, 2000);
-        });
+        }
     }
 
-    // Username validation
-    const usernameInput = document.querySelector('#username');
-    if (usernameInput) {
-        usernameInput.addEventListener('input', function() {
-            const value = this.value;
-            const isValid = /^[a-zA-Z0-9._-]+$/.test(value) && value.length >= 3;
-            
-            if (value && !isValid) {
-                this.style.borderColor = '#ff6b6b';
-                showFieldError(this, 'Имя пользователя может содержать только буквы, цифры, точки, дефисы и подчёркивания. Минимум 3 символа.');
-            } else {
-                this.style.borderColor = '#e9ecef';
-                hideFieldError(this);
+    searchInDatabase(text) {
+        const searchResults = document.getElementById('search-results');
+        const searchTerms = text.toLowerCase().split(' ');
+        
+        const matches = this.database.filter(item => 
+            searchTerms.some(term => 
+                item.name.toLowerCase().includes(term) || 
+                item.description.toLowerCase().includes(term)
+            )
+        );
+
+        searchResults.innerHTML = matches.map(item => `
+            <div class="search-item">
+                <div class="search-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="search-content">
+                    <div class="search-title">${item.name}</div>
+                    <div class="search-snippet">${item.description}</div>
+                </div>
+                <div class="search-score">${Math.round(Math.random() * 40 + 60)}%</div>
+            </div>
+        `).join('') || '<div class="no-results">Совпадений не найдено</div>';
+    }
+
+    // Database Functions
+    loadDatabase() {
+        // Sample database
+        this.database = [
+            { id: 1, name: 'Иванов Иван Иванович', description: 'Агент разведки, Москва', type: 'person' },
+            { id: 2, name: 'Петров Петр Петрович', description: 'Специалист по анализу', type: 'person' },
+            { id: 3, name: 'Сидорова Мария', description: 'Координатор операций', type: 'person' },
+            { id: 4, name: 'Здание на Тверской', description: 'Целевой объект', type: 'location' },
+            { id: 5, name: 'Автомобиль BMW X5', description: 'Транспортное средство', type: 'vehicle' },
+            { id: 6, name: 'Козлов Дмитрий', description: 'Технический специалист', type: 'person' },
+            { id: 7, name: 'Офис на Арбате', description: 'Место встречи', type: 'location' },
+            { id: 8, name: 'Мотоцикл Yamaha', description: 'Средство передвижения', type: 'vehicle' }
+        ];
+    }
+
+    uploadDatabase() {
+        document.getElementById('database-upload').click();
+    }
+
+    handleDatabaseUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                if (file.name.endsWith('.json')) {
+                    this.database = JSON.parse(e.target.result);
+                } else if (file.name.endsWith('.csv')) {
+                    this.parseCSV(e.target.result);
+                }
+                this.showNotification('База данных загружена успешно', 'success');
+                this.searchDatabase('');
+            } catch (error) {
+                this.showNotification('Ошибка загрузки базы данных', 'error');
             }
+        };
+
+        reader.readAsText(file);
+    }
+
+    parseCSV(csvText) {
+        const lines = csvText.split('\n');
+        const headers = lines[0].split(',');
+        
+        this.database = lines.slice(1).map((line, index) => {
+            const values = line.split(',');
+            return {
+                id: index + 1,
+                name: values[0] || '',
+                description: values[1] || '',
+                type: values[2] || 'person'
+            };
         });
     }
 
-    // Email validation
-    const emailInput = document.querySelector('#email');
-    if (emailInput) {
-        emailInput.addEventListener('blur', function() {
-            const value = this.value;
-            const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-            
-            if (value && !isValid) {
-                this.style.borderColor = '#ff6b6b';
-                showFieldError(this, 'Пожалуйста, введите корректный email адрес.');
-            } else {
-                this.style.borderColor = '#e9ecef';
-                hideFieldError(this);
-            }
-        });
+    searchDatabase(query) {
+        const resultsContainer = document.getElementById('database-results');
+        const resultsCount = document.getElementById('results-count');
+        
+        let filteredResults = this.database;
+        
+        if (query) {
+            filteredResults = this.database.filter(item =>
+                item.name.toLowerCase().includes(query.toLowerCase()) ||
+                item.description.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
+        const filterType = document.getElementById('filter-type').value;
+        if (filterType !== 'all') {
+            filteredResults = filteredResults.filter(item => item.type === filterType);
+        }
+
+        resultsCount.textContent = filteredResults.length;
+
+        resultsContainer.innerHTML = filteredResults.map(item => `
+            <div class="result-item">
+                <div class="result-icon">
+                    <i class="fas fa-${item.type === 'person' ? 'user' : item.type === 'location' ? 'map-marker-alt' : 'car'}"></i>
+                </div>
+                <div class="result-content">
+                    <div class="result-title">${item.name}</div>
+                    <div class="result-subtitle">ID: ${item.id} | Тип: ${item.type}</div>
+                    <div class="result-tags">
+                        <span class="tag">${item.type}</span>
+                    </div>
+                </div>
+                <div class="result-actions">
+                    <button class="btn-action" onclick="divergentSystem.viewItem(${item.id})">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-action" onclick="divergentSystem.editItem(${item.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
     }
 
-    // Notification system
-    function showNotification(message, type = 'info') {
+    viewItem(id) {
+        const item = this.database.find(i => i.id === id);
+        if (item) {
+            this.showNotification(`Просмотр: ${item.name}`, 'info');
+        }
+    }
+
+    editItem(id) {
+        const item = this.database.find(i => i.id === id);
+        if (item) {
+            this.showNotification(`Редактирование: ${item.name}`, 'info');
+        }
+    }
+
+    // Chat Functions
+    sendMessage() {
+        const input = document.querySelector('.chat-input input');
+        const message = input.value.trim();
+        
+        if (!message) return;
+
+        const messagesContainer = document.querySelector('.chat-messages');
+        const messageElement = document.createElement('div');
+        messageElement.className = 'message';
+        messageElement.innerHTML = `
+            <div class="message-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="message-content">
+                <div class="message-header">
+                    <span class="message-sender">Вы</span>
+                    <span class="message-time">${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="message-text">${message}</div>
+            </div>
+        `;
+
+        messagesContainer.appendChild(messageElement);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        input.value = '';
+
+        // Simulate response
+        setTimeout(() => {
+            this.addBotMessage();
+        }, 1000);
+    }
+
+    addBotMessage() {
+        const messagesContainer = document.querySelector('.chat-messages');
+        const responses = [
+            'Понял, выполняю задачу',
+            'Данные получены и обработаны',
+            'Операция в процессе',
+            'Требуется дополнительная информация',
+            'Задача выполнена успешно'
+        ];
+
+        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        
+        const messageElement = document.createElement('div');
+        messageElement.className = 'message';
+        messageElement.innerHTML = `
+            <div class="message-avatar">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="message-content">
+                <div class="message-header">
+                    <span class="message-sender">Система</span>
+                    <span class="message-time">${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="message-text">${randomResponse}</div>
+            </div>
+        `;
+
+        messagesContainer.appendChild(messageElement);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Utility Functions
+    showNotification(message, type = 'info') {
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
-        const iconClass = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
         notification.innerHTML = `
             <div class="notification-content">
-                <i class="fas fa-${iconClass}"></i>
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
                 <span>${message}</span>
             </div>
         `;
-        
+
+        // Add notification styles if not exists
+        if (!document.getElementById('notification-styles')) {
+            const style = document.createElement('style');
+            style.id = 'notification-styles';
+            style.textContent = `
+                .notification {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--bg-secondary);
+                    border: 2px solid var(--border-accent);
+                    border-radius: 8px;
+                    padding: 1rem 1.5rem;
+                    z-index: 10000;
+                    transform: translateX(400px);
+                    transition: transform 0.3s ease;
+                    box-shadow: 0 0 20px var(--shadow-color);
+                }
+                .notification.show {
+                    transform: translateX(0);
+                }
+                .notification-success {
+                    border-color: var(--success-color);
+                }
+                .notification-error {
+                    border-color: var(--danger-color);
+                }
+                .notification-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    color: var(--text-primary);
+                }
+                .notification-content i {
+                    color: var(--primary-color);
+                }
+                .notification-success .notification-content i {
+                    color: var(--success-color);
+                }
+                .notification-error .notification-content i {
+                    color: var(--danger-color);
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
         document.body.appendChild(notification);
-        
-        // Show notification
+
         setTimeout(() => {
             notification.classList.add('show');
         }, 100);
-        
-        // Hide notification after 5 seconds
+
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => {
                 notification.remove();
             }, 300);
-        }, 5000);
+        }, 3000);
     }
+}
 
-    function showFieldError(field, message) {
-        hideFieldError(field);
-        
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'field-error';
-        errorDiv.textContent = message;
-        
-        field.parentNode.appendChild(errorDiv);
-    }
-
-    function hideFieldError(field) {
-        const existingError = field.parentNode.querySelector('.field-error');
-        if (existingError) {
-            existingError.remove();
-        }
-    }
-
-    // Profile Management
-    let currentUser = null;
-
-    // Check if user is logged in
-    function checkAuth() {
-        const user = localStorage.getItem('mill-gov-user');
-        if (user) {
-            currentUser = JSON.parse(user);
-            showUserMenu();
-            updateProfileDisplay();
-        }
-    }
-
-    // Show user menu
-    function showUserMenu() {
-        const userMenu = document.getElementById('user-menu');
-        const profileLink = document.getElementById('profile-link');
-        
-        if (userMenu && profileLink) {
-            userMenu.style.display = 'flex';
-            profileLink.style.display = 'block';
-        }
-    }
-
-    // Hide user menu
-    function hideUserMenu() {
-        const userMenu = document.getElementById('user-menu');
-        const profileLink = document.getElementById('profile-link');
-        
-        if (userMenu && profileLink) {
-            userMenu.style.display = 'none';
-            profileLink.style.display = 'none';
-        }
-    }
-
-    // Update profile display
-    function updateProfileDisplay() {
-        if (!currentUser) return;
-
-        // Update header user info
-        const userName = document.getElementById('user-name');
-        const userEmail = document.getElementById('user-email');
-        
-        if (userName) userName.textContent = currentUser.fullname || currentUser.username;
-        if (userEmail) userEmail.textContent = currentUser.email;
-
-        // Update profile section
-        const profileName = document.getElementById('profile-name');
-        const profileEmail = document.getElementById('profile-email');
-        const profileFullname = document.getElementById('profile-fullname');
-        const profileOrganization = document.getElementById('profile-organization');
-        const profileBio = document.getElementById('profile-bio');
-        const profileTimezone = document.getElementById('profile-timezone');
-
-        if (profileName) profileName.textContent = currentUser.fullname || currentUser.username;
-        if (profileEmail) profileEmail.textContent = currentUser.email;
-        if (profileFullname) profileFullname.value = currentUser.fullname || '';
-        if (profileOrganization) profileOrganization.value = currentUser.organization || '';
-        if (profileBio) profileBio.value = currentUser.bio || '';
-        if (profileTimezone) profileTimezone.value = currentUser.timezone || 'UTC+3';
-
-        // Update stats
-        updateProfileStats();
-    }
-
-    // Update profile stats
-    function updateProfileStats() {
-        const emailsSent = document.getElementById('emails-sent');
-        const storageUsed = document.getElementById('storage-used');
-        const accountAge = document.getElementById('account-age');
-
-        if (emailsSent) emailsSent.textContent = currentUser?.stats?.emailsSent || 0;
-        if (storageUsed) storageUsed.textContent = currentUser?.stats?.storageUsed || 0;
-        
-        if (accountAge && currentUser?.createdAt) {
-            const created = new Date(currentUser.createdAt);
-            const now = new Date();
-            const days = Math.floor((now - created) / (1000 * 60 * 60 * 24));
-            accountAge.textContent = days;
-        }
-    }
-
-    // Profile tab switching
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabPanels = document.querySelectorAll('.tab-panel');
-
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const targetTab = btn.getAttribute('data-tab');
-            
-            // Remove active class from all buttons and panels
-            tabBtns.forEach(b => b.classList.remove('active'));
-            tabPanels.forEach(p => p.classList.remove('active'));
-            
-            // Add active class to clicked button and corresponding panel
-            btn.classList.add('active');
-            document.getElementById(targetTab + '-tab').classList.add('active');
-        });
-    });
-
-    // Profile form submission
-    const profileForm = document.querySelector('.profile-form');
-    if (profileForm) {
-        profileForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const updates = {
-                fullname: formData.get('fullname'),
-                organization: formData.get('organization'),
-                bio: formData.get('bio'),
-                timezone: formData.get('timezone')
-            };
-
-            // Update current user
-            if (currentUser) {
-                Object.assign(currentUser, updates);
-                localStorage.setItem('mill-gov-user', JSON.stringify(currentUser));
-                updateProfileDisplay();
-                showNotification('Профиль успешно обновлён!', 'success');
-            }
-        });
-    }
-
-    // Color picker functionality
-    const colorPresets = document.querySelectorAll('.color-preset');
-    const accentColorInput = document.getElementById('accent-color');
-
-    colorPresets.forEach(preset => {
-        preset.addEventListener('click', () => {
-            const color = preset.getAttribute('data-color');
-            if (accentColorInput) {
-                accentColorInput.value = color;
-                updateAccentColor(color);
-            }
-        });
-    });
-
-    if (accentColorInput) {
-        accentColorInput.addEventListener('change', (e) => {
-            updateAccentColor(e.target.value);
-        });
-    }
-
-    // Update accent color
-    function updateAccentColor(color) {
-        document.documentElement.style.setProperty('--primary-color', color);
-        document.documentElement.style.setProperty('--accent-color', color);
-        
-        // Update gradients
-        const newGradient = `linear-gradient(135deg, ${color} 0%, ${adjustColor(color, -20)} 100%)`;
-        document.documentElement.style.setProperty('--gradient-primary', newGradient);
-    }
-
-    // Adjust color brightness
-    function adjustColor(color, amount) {
-        const num = parseInt(color.replace("#", ""), 16);
-        const amt = Math.round(2.55 * amount);
-        const R = (num >> 16) + amt;
-        const G = (num >> 8 & 0x00FF) + amt;
-        const B = (num & 0x0000FF) + amt;
-        return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-            (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
-            (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
-    }
-
-    // Font size slider
-    const fontSizeSlider = document.getElementById('font-size');
-    const fontSizeValue = document.querySelector('.font-size-value');
-
-    if (fontSizeSlider && fontSizeValue) {
-        fontSizeSlider.addEventListener('input', (e) => {
-            const size = e.target.value;
-            fontSizeValue.textContent = size + 'px';
-            document.documentElement.style.fontSize = size + 'px';
-        });
-    }
-
-    // Logout functionality
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            logout();
-        });
-    }
-
-    // Logout function
-    function logout() {
-        currentUser = null;
-        localStorage.removeItem('mill-gov-user');
-        hideUserMenu();
-        hideProfileSection();
-        showNotification('Вы успешно вышли из аккаунта', 'success');
-    }
-
-    // Show profile section
-    function showProfileSection() {
-        const profileSection = document.getElementById('profile');
-        if (profileSection) {
-            profileSection.style.display = 'block';
-            profileSection.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
-    // Hide profile section
-    function hideProfileSection() {
-        const profileSection = document.getElementById('profile');
-        if (profileSection) {
-            profileSection.style.display = 'none';
-        }
-    }
-
-    // Profile link click handler
-    const profileLink = document.getElementById('profile-link');
-    if (profileLink) {
-        profileLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            showProfileSection();
-        });
-    }
-
-    // Enhanced registration form
-    if (registrationForm) {
-        registrationForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const userData = {
-                username: formData.get('username'),
-                email: formData.get('email'),
-                fullname: formData.get('fullname'),
-                organization: formData.get('organization'),
-                createdAt: new Date().toISOString(),
-                stats: {
-                    emailsSent: 0,
-                    storageUsed: 0
-                }
-            };
-
-            // Show loading state
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Создание аккаунта...';
-            submitBtn.disabled = true;
-            
-            // Simulate account creation
-            setTimeout(() => {
-                // Save user data
-                currentUser = userData;
-                localStorage.setItem('mill-gov-user', JSON.stringify(userData));
-                
-                // Show success message
-                showNotification('Аккаунт успешно создан! Добро пожаловать!', 'success');
-                
-                // Show user menu
-                showUserMenu();
-                updateProfileDisplay();
-                
-                // Reset form
-                this.reset();
-                
-                // Reset button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                
-                // Show profile section
-                setTimeout(() => {
-                    showProfileSection();
-                }, 1000);
-            }, 2000);
-        });
-    }
-
-    // Initialize on page load
-    checkAuth();
-
-    // Counter animation
-    function animateCounters() {
-        const counters = document.querySelectorAll('.stat-number[data-count]');
-        
-        counters.forEach(counter => {
-            const target = parseFloat(counter.getAttribute('data-count'));
-            const duration = 2000;
-            const increment = target / (duration / 16);
-            let current = 0;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                
-                if (target % 1 === 0) {
-                    counter.textContent = Math.floor(current);
-                } else {
-                    counter.textContent = current.toFixed(1);
-                }
-            }, 16);
-        });
-    }
-
-    // Email availability check
-    const emailInput = document.getElementById('email-username');
-    const checkEmailBtn = document.getElementById('check-email-btn');
-    
-    if (emailInput && checkEmailBtn) {
-        checkEmailBtn.addEventListener('click', function() {
-            const username = emailInput.value.trim();
-            
-            if (!username) {
-                showNotification('Введите желаемое имя пользователя', 'error');
-                return;
-            }
-            
-            if (!/^[a-zA-Z0-9._-]+$/.test(username)) {
-                showNotification('Имя пользователя может содержать только буквы, цифры, точки, дефисы и подчёркивания', 'error');
-                return;
-            }
-            
-            if (username.length < 3) {
-                showNotification('Имя пользователя должно содержать минимум 3 символа', 'error');
-                return;
-            }
-            
-            // Show loading state
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Проверка...';
-            this.disabled = true;
-            
-            // Simulate API call
-            setTimeout(() => {
-                // Simulate random availability
-                const isAvailable = Math.random() > 0.3;
-                
-                if (isAvailable) {
-                    showNotification(`Отлично! ${username}@mill-gov.ru доступен!`, 'success');
-                    emailInput.style.borderColor = '#28a745';
-                } else {
-                    showNotification(`К сожалению, ${username}@mill-gov.ru уже занят. Попробуйте другой вариант.`, 'error');
-                    emailInput.style.borderColor = '#ff6b6b';
-                }
-                
-                // Reset button
-                this.innerHTML = originalText;
-                this.disabled = false;
-            }, 1500);
-        });
-        
-        // Real-time validation
-        emailInput.addEventListener('input', function() {
-            const value = this.value;
-            const isValid = /^[a-zA-Z0-9._-]+$/.test(value) && value.length >= 3;
-            
-            if (value && !isValid) {
-                this.style.borderColor = '#ff6b6b';
-            } else if (value && isValid) {
-                this.style.borderColor = '#28a745';
-            } else {
-                this.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-            }
-        });
-    }
-
-    // Intersection Observer for animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                if (entry.target.classList.contains('hero-stats')) {
-                    animateCounters();
-                }
-                
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-
-    // Observe elements for animation
-    const animatedElements = document.querySelectorAll('.hero-stats, .showcase-item, .about-card, .feature-card, .news-card');
-    animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
-
-    // Parallax effect for floating cards
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallaxElements = document.querySelectorAll('.floating-card');
-        
-        parallaxElements.forEach((element, index) => {
-            const speed = 0.5 + (index * 0.1);
-            element.style.transform = `translateY(${scrolled * speed}px)`;
-        });
-    });
-
-    // Add typing effect to hero title
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        const titleLines = heroTitle.querySelectorAll('.title-line, .title-highlight');
-        titleLines.forEach((line, index) => {
-            line.style.opacity = '0';
-            line.style.transform = 'translateY(30px)';
-            
-            setTimeout(() => {
-                line.style.transition = 'all 0.8s ease';
-                line.style.opacity = '1';
-                line.style.transform = 'translateY(0)';
-            }, index * 200);
-        });
-    }
+// Initialize system when page loads
+let divergentSystem;
+document.addEventListener('DOMContentLoaded', () => {
+    divergentSystem = new DivergentSystem();
 });
-
-// Add CSS for ripple effect
-const style = document.createElement('style');
-style.textContent = `
-    .ripple {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.6);
-        transform: scale(0);
-        animation: ripple-animation 0.6s linear;
-        pointer-events: none;
-    }
-    
-    @keyframes ripple-animation {
-        to {
-            transform: scale(4);
-            opacity: 0;
-        }
-    }
-    
-    .btn, .link-btn {
-        position: relative;
-        overflow: hidden;
-    }
-    
-    body.loaded {
-        opacity: 1;
-    }
-    
-    body {
-        opacity: 0;
-        transition: opacity 0.5s ease;
-    }
-    
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        padding: 1rem 1.5rem;
-        z-index: 10000;
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        border-left: 4px solid #667eea;
-    }
-    
-    .notification.show {
-        transform: translateX(0);
-    }
-    
-    .notification-success {
-        border-left-color: #28a745;
-    }
-    
-    .notification-error {
-        border-left-color: #ff6b6b;
-    }
-    
-    .notification-content {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    .notification-content i {
-        color: #667eea;
-        font-size: 1.2rem;
-    }
-    
-    .notification-success .notification-content i {
-        color: #28a745;
-    }
-    
-    .notification-error .notification-content i {
-        color: #ff6b6b;
-    }
-    
-    .field-error {
-        color: #ff6b6b;
-        font-size: 0.8rem;
-        margin-top: 0.5rem;
-        display: block;
-    }
-`;
-document.head.appendChild(style);

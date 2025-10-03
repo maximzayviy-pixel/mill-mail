@@ -3,618 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mill-Gov.ru - Профессиональная почта</title>
+    <title>ДИВЕРГЕНТ</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div class="logo-text">
-                        <h1>Mill-Gov.ru</h1>
-                        <p>Профессиональная почта</p>
-                    </div>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-crosshairs"></i>
                 </div>
-                <nav class="nav">
-                    <ul class="nav-list">
-                        <li><a href="#about" class="nav-link">О сервисе</a></li>
-                        <li><a href="#features" class="nav-link">Возможности</a></li>
-                        <li><a href="#register" class="nav-link">Регистрация</a></li>
-                        <li><a href="#profile" class="nav-link" id="profile-link" style="display: none;">Профиль</a></li>
-                        <li><a href="#contacts" class="nav-link">Контакты</a></li>
-                    </ul>
-                </nav>
-                <div class="user-menu" id="user-menu" style="display: none;">
-                    <div class="user-avatar" id="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="user-dropdown">
-                        <div class="user-info">
-                            <div class="user-name" id="user-name">Пользователь</div>
-                            <div class="user-email" id="user-email">user@mill-gov.ru</div>
-                        </div>
-                        <div class="dropdown-menu">
-                            <a href="#profile" class="dropdown-item">
-                                <i class="fas fa-user-cog"></i>
-                                Настройки профиля
-                            </a>
-                            <a href="#logout" class="dropdown-item" id="logout-btn">
-                                <i class="fas fa-sign-out-alt"></i>
-                                Выйти
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <h1>ДИВЕРГЕНТ</h1>
+                <p>ССРД</p>
             </div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <div class="loading-text">Проверка системы...</div>
         </div>
-    </header>
+    </div>
 
-    <!-- Development Notice -->
-    <div class="dev-notice">
-        <div class="container">
-            <div class="dev-notice-content">
-                <i class="fas fa-tools"></i>
-                <span>Сервис находится в разработке. Регистрация будет доступна в ближайшее время.</span>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="system-logo">
+                    <i class="fas fa-crosshairs"></i>
+                </div>
+                <h1>ДИВЕРГЕНТ</h1>
+                <p>ССРД</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="access-key">Ключ доступа</label>
+                    <div class="input-container">
+                        <input type="password" id="access-key" placeholder="Введите ключ доступа">
+                        <i class="fas fa-key"></i>
+                    </div>
+                </div>
+                
+                <div class="attempts-counter">
+                    <span>Попыток: </span>
+                    <span id="attempts-left">3</span>
+                </div>
+                
+                <button id="login-btn" class="btn-login">
+                    <i class="fas fa-unlock"></i>
+                    Войти в систему
+                </button>
+                
+                <div id="login-error" class="error-message"></div>
+            </div>
+            
+            <div class="login-footer">
+                <div class="security-info">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Защищено шифрованием AES-256</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-background">
-            <div class="hero-particles"></div>
-            <div class="hero-gradient"></div>
-        </div>
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fas fa-star"></i>
-                    <span>Новое поколение email-сервиса</span>
+    <!-- Main System Interface -->
+    <div id="main-system" class="main-system" style="display: none;">
+        <!-- Header -->
+        <header class="system-header">
+            <div class="header-left">
+                <div class="system-logo">
+                    <i class="fas fa-crosshairs"></i>
+                    <span>ДИВЕРГЕНТ</span>
                 </div>
-                <h1 class="hero-title">
-                    <span class="title-line">Создайте свой</span>
-                    <span class="title-highlight">профессиональный email</span>
-                    <span class="title-line">@mill-gov.ru</span>
-                </h1>
-                <p class="hero-subtitle">Современный, безопасный и красивый email-сервис для профессионалов. Создайте свою уникальную страницу и начните общаться стильно.</p>
-                
-                <!-- Email Selection -->
-                <div class="email-selector">
-                    <div class="email-input-group">
-                        <input type="text" id="email-username" placeholder="ваше_имя" class="email-input">
-                        <span class="email-domain">@mill-gov.ru</span>
+            </div>
+            
+            <div class="header-center">
+                <div class="status-indicators">
+                    <div class="status-item">
+                        <i class="fas fa-satellite"></i>
+                        <span>Спутник: Онлайн</span>
                     </div>
-                    <button class="btn btn-primary btn-large" id="check-email-btn">
-                        <i class="fas fa-search"></i>
-                        Проверить доступность
-                    </button>
-                </div>
-                
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <div class="stat-number" data-count="12500">0</div>
-                        <div class="stat-label">Активных пользователей</div>
+                    <div class="status-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Безопасность: Активна</span>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number" data-count="99.9">0</div>
-                        <div class="stat-label">% Время работы</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" data-count="256">0</div>
-                        <div class="stat-label">Стран мира</div>
+                    <div class="status-item">
+                        <i class="fas fa-database"></i>
+                        <span>База: Синхронизирована</span>
                     </div>
                 </div>
             </div>
             
-            <!-- Floating Cards -->
-            <div class="floating-cards">
-                <div class="floating-card card-1">
-                    <div class="card-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h4>Безопасность</h4>
-                    <p>256-bit шифрование</p>
+            <div class="header-right">
+                <div class="user-info">
+                    <i class="fas fa-user-secret"></i>
+                    <span>Оператор</span>
                 </div>
-                <div class="floating-card card-2">
-                    <div class="card-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <h4>Скорость</h4>
-                    <p>Мгновенная доставка</p>
-                </div>
-                <div class="floating-card card-3">
-                    <div class="card-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h4>Дизайн</h4>
-                    <p>Персонализация</p>
-                </div>
+                <button id="logout-btn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
             </div>
-        </div>
-    </section>
+        </header>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="section-header">
-                <h2>О сервисе</h2>
-                <p>Mill-Gov.ru — это современный email-сервис с красивым доменом для профессиональной переписки</p>
+        <!-- Navigation -->
+        <nav class="system-nav">
+            <div class="nav-item active" data-tab="map">
+                <i class="fas fa-map"></i>
+                <span>Карта</span>
             </div>
-            <div class="about-grid">
-                <div class="about-card">
-                    <div class="card-icon">
-                        <i class="fas fa-envelope-open"></i>
-                    </div>
-                    <h3>Профессиональная почта</h3>
-                    <p>Получите красивый email-адрес с доменом @mill-gov.ru для деловой переписки и официальных документов</p>
-                </div>
-                <div class="about-card">
-                    <div class="card-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Безопасность</h3>
-                    <p>Высокий уровень защиты данных и шифрование переписки для обеспечения конфиденциальности</p>
-                </div>
-                <div class="about-card">
-                    <div class="card-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Удобство использования</h3>
-                    <p>Современный интерфейс, доступ с любых устройств и интеграция с популярными почтовыми клиентами</p>
-                </div>
+            <div class="nav-item" data-tab="chats">
+                <i class="fas fa-comments"></i>
+                <span>Чаты</span>
             </div>
-        </div>
-    </section>
+            <div class="nav-item" data-tab="scanner">
+                <i class="fas fa-qrcode"></i>
+                <span>Сканер</span>
+            </div>
+            <div class="nav-item" data-tab="compass">
+                <i class="fas fa-compass"></i>
+                <span>Компас</span>
+            </div>
+            <div class="nav-item" data-tab="database">
+                <i class="fas fa-database"></i>
+                <span>База данных</span>
+            </div>
+        </nav>
 
-    <!-- Profile Showcase Section -->
-    <section class="profile-showcase">
-        <div class="container">
-            <div class="section-header">
-                <h2>Создайте свою уникальную страницу</h2>
-                <p>Каждый пользователь получает красивую персональную страницу вида mill-gov.ru/username</p>
-            </div>
-            <div class="showcase-grid">
-                <div class="showcase-item">
-                    <div class="profile-preview">
-                        <div class="preview-header">
-                            <div class="preview-avatar">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Александр">
-                            </div>
-                            <div class="preview-info">
-                                <h3>Александр Петров</h3>
-                                <p>alexander@mill-gov.ru</p>
-                                <div class="preview-badges">
-                                    <span class="badge">Frontend Developer</span>
-                                    <span class="badge">Moscow</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="preview-content">
-                            <p>Создаю современные веб-приложения с использованием React и TypeScript. Увлекаюсь UI/UX дизайном.</p>
-                            <div class="preview-social">
-                                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="showcase-url">mill-gov.ru/alexander</div>
-                </div>
-                
-                <div class="showcase-item">
-                    <div class="profile-preview">
-                        <div class="preview-header">
-                            <div class="preview-avatar">
-                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="Мария">
-                            </div>
-                            <div class="preview-info">
-                                <h3>Мария Сидорова</h3>
-                                <p>maria@mill-gov.ru</p>
-                                <div class="preview-badges">
-                                    <span class="badge">Marketing Manager</span>
-                                    <span class="badge">St. Petersburg</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="preview-content">
-                            <p>Специалист по digital-маркетингу с 5-летним опытом. Помогаю брендам расти в онлайн-пространстве.</p>
-                            <div class="preview-social">
-                                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                                <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
-                                <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="showcase-url">mill-gov.ru/maria</div>
-                </div>
-                
-                <div class="showcase-item">
-                    <div class="profile-preview">
-                        <div class="preview-header">
-                            <div class="preview-avatar">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="Дмитрий">
-                            </div>
-                            <div class="preview-info">
-                                <h3>Дмитрий Козлов</h3>
-                                <p>dmitry@mill-gov.ru</p>
-                                <div class="preview-badges">
-                                    <span class="badge">CEO & Founder</span>
-                                    <span class="badge">Novosibirsk</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="preview-content">
-                            <p>Основатель IT-стартапа. Создаю продукты, которые меняют мир к лучшему. Инвестор и ментор.</p>
-                            <div class="preview-social">
-                                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                                <a href="#" class="social-link"><i class="fab fa-medium"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="showcase-url">mill-gov.ru/dmitry</div>
-                </div>
-            </div>
-            
-            <div class="showcase-cta">
-                <h3>Создайте свою страницу за 2 минуты</h3>
-                <p>Добавьте фото, описание, ссылки на соц-сети и получите красивую персональную страницу</p>
-                <a href="#register" class="btn btn-primary btn-large">
-                    <i class="fas fa-plus"></i>
-                    Создать страницу
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="container">
-            <div class="section-header">
-                <h2>Возможности сервиса</h2>
-                <p>Что вы получите с почтой @mill-gov.ru</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-at"></i>
-                    </div>
-                    <h3>Красивый домен</h3>
-                    <p>Профессиональный email-адрес с доменом @mill-gov.ru для деловой переписки</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <h3>Шифрование</h3>
-                    <p>Полное шифрование переписки для обеспечения конфиденциальности ваших данных</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <h3>Облачное хранение</h3>
-                    <p>Надёжное хранение писем в облаке с возможностью доступа с любого устройства</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-filter"></i>
-                    </div>
-                    <h3>Умная фильтрация</h3>
-                    <p>Автоматическая сортировка писем и защита от спама для удобства работы</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-sync"></i>
-                    </div>
-                    <h3>Синхронизация</h3>
-                    <p>Синхронизация с популярными почтовыми клиентами и мобильными приложениями</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-headset"></i>
-                    </div>
-                    <h3>Техподдержка</h3>
-                    <p>Круглосуточная техническая поддержка для решения любых вопросов</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Registration Section -->
-    <section id="register" class="register">
-        <div class="container">
-            <div class="section-header">
-                <h2>Регистрация</h2>
-                <p>Получите свой профессиональный email @mill-gov.ru</p>
-            </div>
-            <div class="register-content">
-                <div class="register-form">
-                    <form class="form">
-                        <div class="form-group">
-                            <label for="username">Желаемое имя пользователя</label>
-                            <div class="input-group">
-                                <input type="text" id="username" name="username" placeholder="ваше_имя" required>
-                                <span class="domain">@mill-gov.ru</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Контактный email</label>
-                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="fullname">Полное имя</label>
-                            <input type="text" id="fullname" name="fullname" placeholder="Иванов Иван Иванович" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="organization">Организация (необязательно)</label>
-                            <input type="text" id="organization" name="organization" placeholder="Название организации">
-                        </div>
-                        <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" required>
-                                <span class="checkmark"></span>
-                                Согласен с <a href="#" class="terms-link">условиями использования</a>
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-large">
-                            <i class="fas fa-envelope"></i>
-                            Зарегистрироваться
+        <!-- Main Content -->
+        <main class="system-content">
+            <!-- Map Tab -->
+            <div id="map-tab" class="tab-content active">
+                <div class="map-container">
+                    <div id="map" class="map"></div>
+                    <div class="map-controls">
+                        <button class="map-btn" id="satellite-toggle">
+                            <i class="fas fa-satellite"></i>
+                            Спутник
                         </button>
-                    </form>
-                </div>
-                <div class="register-info">
-                    <h3>Что дальше?</h3>
-                    <div class="steps">
-                        <div class="step">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h4>Заполните форму</h4>
-                                <p>Укажите желаемое имя пользователя и контактные данные</p>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h4>Подтвердите email</h4>
-                                <p>Мы отправим письмо с подтверждением на указанный адрес</p>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h4>Получите доступ</h4>
-                                <p>После подтверждения вы получите доступ к своему @mill-gov.ru</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Profile Section -->
-    <section id="profile" class="profile" style="display: none;">
-        <div class="container">
-            <div class="section-header">
-                <h2>Мой профиль</h2>
-                <p>Управляйте настройками вашего аккаунта @mill-gov.ru</p>
-            </div>
-            <div class="profile-content">
-                <div class="profile-sidebar">
-                    <div class="profile-card">
-                        <div class="profile-avatar">
-                            <img src="" alt="Аватар" id="profile-avatar-img">
-                            <div class="avatar-overlay">
-                                <i class="fas fa-camera"></i>
-                            </div>
-                        </div>
-                        <div class="profile-info">
-                            <h3 id="profile-name">Имя пользователя</h3>
-                            <p id="profile-email">user@mill-gov.ru</p>
-                            <div class="profile-status">
-                                <span class="status-dot"></span>
-                                <span>Активен</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="profile-stats">
-                        <div class="stat-item">
-                            <div class="stat-number" id="emails-sent">0</div>
-                            <div class="stat-label">Писем отправлено</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="storage-used">0</div>
-                            <div class="stat-label">МБ использовано</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="account-age">0</div>
-                            <div class="stat-label">Дней с регистрации</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="profile-main">
-                    <div class="profile-tabs">
-                        <button class="tab-btn active" data-tab="settings">
-                            <i class="fas fa-cog"></i>
-                            Настройки
+                        <button class="map-btn" id="terrain-toggle">
+                            <i class="fas fa-mountain"></i>
+                            Рельеф
                         </button>
-                        <button class="tab-btn" data-tab="security">
-                            <i class="fas fa-shield-alt"></i>
-                            Безопасность
-                        </button>
-                        <button class="tab-btn" data-tab="appearance">
-                            <i class="fas fa-palette"></i>
-                            Внешний вид
+                        <button class="map-btn" id="street-toggle">
+                            <i class="fas fa-road"></i>
+                            Улицы
                         </button>
                     </div>
-                    <div class="tab-content">
-                        <div class="tab-panel active" id="settings-tab">
-                            <h3>Основные настройки</h3>
-                            <form class="profile-form">
-                                <div class="form-group">
-                                    <label for="profile-fullname">Полное имя</label>
-                                    <input type="text" id="profile-fullname" name="fullname" value="">
+                    <div class="map-info">
+                        <div class="coordinates">
+                            <span>Широта: <span id="lat">0.0000</span>°</span>
+                            <span>Долгота: <span id="lng">0.0000</span>°</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chats Tab -->
+            <div id="chats-tab" class="tab-content">
+                <div class="chats-container">
+                    <div class="chats-sidebar">
+                        <div class="chats-header">
+                            <h3>Чаты</h3>
+                            <button class="btn-new-chat">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="chats-list">
+                            <div class="chat-item active">
+                                <div class="chat-avatar">
+                                    <i class="fas fa-users"></i>
                                 </div>
-                                <div class="form-group">
-                                    <label for="profile-organization">Организация</label>
-                                    <input type="text" id="profile-organization" name="organization" value="">
+                                <div class="chat-info">
+                                    <div class="chat-name">Командный канал</div>
+                                    <div class="chat-last-message">Последнее сообщение...</div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="profile-bio">О себе</label>
-                                    <textarea id="profile-bio" name="bio" rows="4" placeholder="Расскажите о себе..."></textarea>
+                                <div class="chat-time">12:34</div>
+                            </div>
+                            <div class="chat-item">
+                                <div class="chat-avatar">
+                                    <i class="fas fa-user"></i>
                                 </div>
-                                <div class="form-group">
-                                    <label for="profile-timezone">Часовой пояс</label>
-                                    <select id="profile-timezone" name="timezone">
-                                        <option value="UTC+3">Москва (UTC+3)</option>
-                                        <option value="UTC+2">Калининград (UTC+2)</option>
-                                        <option value="UTC+4">Самара (UTC+4)</option>
-                                        <option value="UTC+5">Екатеринбург (UTC+5)</option>
-                                        <option value="UTC+6">Омск (UTC+6)</option>
-                                        <option value="UTC+7">Красноярск (UTC+7)</option>
-                                        <option value="UTC+8">Иркутск (UTC+8)</option>
-                                        <option value="UTC+9">Якутск (UTC+9)</option>
-                                        <option value="UTC+10">Владивосток (UTC+10)</option>
-                                    </select>
+                                <div class="chat-info">
+                                    <div class="chat-name">Агент 007</div>
+                                    <div class="chat-last-message">Данные получены</div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save"></i>
-                                    Сохранить изменения
+                                <div class="chat-time">11:22</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-main">
+                        <div class="chat-header">
+                            <div class="chat-title">Командный канал</div>
+                            <div class="chat-actions">
+                                <button class="chat-action">
+                                    <i class="fas fa-phone"></i>
                                 </button>
-                            </form>
+                                <button class="chat-action">
+                                    <i class="fas fa-video"></i>
+                                </button>
+                                <button class="chat-action">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="tab-panel" id="security-tab">
-                            <h3>Безопасность</h3>
-                            <div class="security-settings">
-                                <div class="security-item">
-                                    <div class="security-info">
-                                        <h4>Пароль</h4>
-                                        <p>Последнее изменение: никогда</p>
-                                    </div>
-                                    <button class="btn btn-secondary" id="change-password">
-                                        <i class="fas fa-key"></i>
-                                        Изменить пароль
-                                    </button>
+                        <div class="chat-messages">
+                            <div class="message">
+                                <div class="message-avatar">
+                                    <i class="fas fa-user-shield"></i>
                                 </div>
-                                <div class="security-item">
-                                    <div class="security-info">
-                                        <h4>Двухфакторная аутентификация</h4>
-                                        <p>Дополнительная защита вашего аккаунта</p>
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-sender">Командир</span>
+                                        <span class="message-time">12:34</span>
                                     </div>
-                                    <button class="btn btn-secondary" id="enable-2fa">
-                                        <i class="fas fa-mobile-alt"></i>
-                                        Включить 2FA
-                                    </button>
-                                </div>
-                                <div class="security-item">
-                                    <div class="security-info">
-                                        <h4>Активные сессии</h4>
-                                        <p>Управление устройствами с доступом к аккаунту</p>
-                                    </div>
-                                    <button class="btn btn-secondary" id="manage-sessions">
-                                        <i class="fas fa-desktop"></i>
-                                        Управление сессиями
-                                    </button>
+                                    <div class="message-text">Все агенты, готовьтесь к операции</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-panel" id="appearance-tab">
-                            <h3>Внешний вид</h3>
-                            <div class="appearance-settings">
-                                <div class="setting-group">
-                                    <label for="theme-select">Тема оформления</label>
-                                    <select id="theme-select" name="theme">
-                                        <option value="dark">Тёмная</option>
-                                        <option value="light">Светлая</option>
-                                        <option value="auto">Автоматически</option>
-                                    </select>
+                        <div class="chat-input">
+                            <input type="text" placeholder="Введите сообщение...">
+                            <button class="btn-send">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scanner Tab -->
+            <div id="scanner-tab" class="tab-content">
+                <div class="scanner-container">
+                    <div class="scanner-header">
+                        <h3>Сканер документов</h3>
+                        <div class="scanner-actions">
+                            <button class="btn-scanner" id="upload-file">
+                                <i class="fas fa-upload"></i>
+                                Загрузить файл
+                            </button>
+                            <button class="btn-scanner" id="camera-scan">
+                                <i class="fas fa-camera"></i>
+                                Сканировать
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="scanner-main">
+                        <div class="scanner-preview">
+                            <div class="preview-area" id="preview-area">
+                                <i class="fas fa-file-upload"></i>
+                                <p>Загрузите документ для сканирования</p>
+                            </div>
+                        </div>
+                        
+                        <div class="scanner-results">
+                            <h4>Извлеченный текст:</h4>
+                            <div class="extracted-text" id="extracted-text">
+                                Текст появится здесь после сканирования...
+                            </div>
+                            
+                            <div class="search-results">
+                                <h4>Результаты поиска в базе:</h4>
+                                <div class="search-list" id="search-results">
+                                    <div class="search-item">
+                                        <div class="search-icon">
+                                            <i class="fas fa-file-alt"></i>
+                                        </div>
+                                        <div class="search-content">
+                                            <div class="search-title">Документ 1</div>
+                                            <div class="search-snippet">Совпадение найдено в строке 15...</div>
+                                        </div>
+                                        <div class="search-score">95%</div>
+                                    </div>
                                 </div>
-                                <div class="setting-group">
-                                    <label for="accent-color">Акцентный цвет</label>
-                                    <div class="color-picker">
-                                        <input type="color" id="accent-color" value="#667eea">
-                                        <div class="color-presets">
-                                            <div class="color-preset" data-color="#667eea" style="background: #667eea;"></div>
-                                            <div class="color-preset" data-color="#ff6b6b" style="background: #ff6b6b;"></div>
-                                            <div class="color-preset" data-color="#4ecdc4" style="background: #4ecdc4;"></div>
-                                            <div class="color-preset" data-color="#45b7d1" style="background: #45b7d1;"></div>
-                                            <div class="color-preset" data-color="#96ceb4" style="background: #96ceb4;"></div>
-                                            <div class="color-preset" data-color="#feca57" style="background: #feca57;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compass Tab -->
+            <div id="compass-tab" class="tab-content">
+                <div class="compass-container">
+                    <div class="compass-main">
+                        <div class="compass-circle">
+                            <div class="compass-needle" id="compass-needle"></div>
+                            <div class="compass-directions">
+                                <div class="direction north">С</div>
+                                <div class="direction east">В</div>
+                                <div class="direction south">Ю</div>
+                                <div class="direction west">З</div>
+                            </div>
+                            <div class="compass-center">
+                                <div class="compass-degree" id="compass-degree">0°</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="compass-info">
+                        <div class="compass-data">
+                            <div class="data-item">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>Направление: <span id="compass-direction">Север</span></span>
+                            </div>
+                            <div class="data-item">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Скорость: <span id="compass-speed">0 км/ч</span></span>
+                            </div>
+                            <div class="data-item">
+                                <i class="fas fa-thermometer-half"></i>
+                                <span>Температура: <span id="compass-temp">22°C</span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="compass-controls">
+                            <button class="compass-btn" id="calibrate-compass">
+                                <i class="fas fa-sync"></i>
+                                Калибровка
+                            </button>
+                            <button class="compass-btn" id="reset-compass">
+                                <i class="fas fa-redo"></i>
+                                Сброс
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Tab -->
+            <div id="database-tab" class="tab-content">
+                <div class="database-container">
+                    <div class="database-header">
+                        <h3>База данных</h3>
+                        <div class="database-actions">
+                            <button class="btn-database" id="upload-database">
+                                <i class="fas fa-upload"></i>
+                                Загрузить базу
+                            </button>
+                            <button class="btn-database" id="export-database">
+                                <i class="fas fa-download"></i>
+                                Экспорт
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="database-main">
+                        <div class="database-search">
+                            <div class="search-box">
+                                <input type="text" id="database-search" placeholder="Поиск по базе данных...">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <div class="search-filters">
+                                <select id="filter-type">
+                                    <option value="all">Все типы</option>
+                                    <option value="person">Персоны</option>
+                                    <option value="location">Места</option>
+                                    <option value="vehicle">Транспорт</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="database-results">
+                            <div class="results-header">
+                                <span>Найдено: <span id="results-count">0</span> записей</span>
+                            </div>
+                            <div class="results-list" id="database-results">
+                                <div class="result-item">
+                                    <div class="result-icon">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="result-content">
+                                        <div class="result-title">Иванов Иван Иванович</div>
+                                        <div class="result-subtitle">ID: 12345 | Статус: Активен</div>
+                                        <div class="result-tags">
+                                            <span class="tag">Персона</span>
+                                            <span class="tag">Москва</span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="setting-group">
-                                    <label for="font-size">Размер шрифта</label>
-                                    <input type="range" id="font-size" min="12" max="18" value="14">
-                                    <span class="font-size-value">14px</span>
+                                    <div class="result-actions">
+                                        <button class="btn-action">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </main>
+    </div>
 
-    <!-- Footer -->
-    <footer id="contacts" class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-logo">
-                        <div class="footer-logo-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="footer-logo-text">
-                            <h3>Mill-Gov.ru</h3>
-                            <p>Профессиональная почта</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Контакты</h4>
-                    <div class="contact-info">
-                        <p><i class="fas fa-envelope"></i> support@mill-gov.ru</p>
-                        <p><i class="fas fa-phone"></i> +7 (800) 123-45-67</p>
-                        <p><i class="fas fa-clock"></i> Пн-Пт: 9:00 - 18:00</p>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Сервис</h4>
-                    <ul class="footer-links">
-                        <li><a href="#about">О сервисе</a></li>
-                        <li><a href="#features">Возможности</a></li>
-                        <li><a href="#register">Регистрация</a></li>
-                        <li><a href="#">Техподдержка</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Домен</h4>
-                    <div class="domain-info">
-                        <p><strong>mill-gov.ru</strong></p>
-                        <p>Профессиональный домен для деловой переписки</p>
-                        <div class="domain-status">
-                            <span class="status-dot"></span>
-                            <span>Домен активен</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Mill-Gov.ru. Все права защищены.</p>
-                <p class="dev-status">Сервис находится в разработке</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Hidden file inputs -->
+    <input type="file" id="file-upload" accept=".pdf,.jpg,.jpeg,.png,.txt,.csv,.xlsx,.html" style="display: none;">
+    <input type="file" id="database-upload" accept=".csv,.xlsx,.html,.json" style="display: none;">
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
