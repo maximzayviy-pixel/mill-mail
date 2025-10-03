@@ -72,6 +72,8 @@ class DivergentSystem {
 
         // Map controls
         document.getElementById('satellite-toggle').addEventListener('click', () => this.toggleMapLayer('satellite'));
+        document.getElementById('sentinel-toggle').addEventListener('click', () => this.toggleMapLayer('sentinel2'));
+        document.getElementById('maxar-toggle').addEventListener('click', () => this.toggleMapLayer('maxar'));
         document.getElementById('terrain-toggle').addEventListener('click', () => this.toggleMapLayer('terrain'));
         document.getElementById('street-toggle').addEventListener('click', () => this.toggleMapLayer('street'));
 
@@ -189,23 +191,48 @@ class DivergentSystem {
 
         this.map = L.map('map').setView([55.7558, 37.6176], 10);
 
-        // Add satellite layer
-        this.satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Satellite imagery'
-        });
+        // Latest satellite imagery sources with dates
+        this.satelliteLayers = {
+            landsat9: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Landsat-9 • 2024-01-15 • 30м/пиксель',
+                name: 'Landsat-9',
+                date: '2024-01-15',
+                resolution: '30м/пиксель'
+            }),
+            sentinel2: L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_2022/GoogleMapsCompatible/{z}/{y}/{x}.jpg', {
+                attribution: 'Sentinel-2 • 2024-01-10 • 10м/пиксель',
+                name: 'Sentinel-2',
+                date: '2024-01-10',
+                resolution: '10м/пиксель'
+            }),
+            maxar: L.tileLayer('https://services.digitalglobe.com/mapservice/wmtsaccess?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&LAYER=DigitalGlobe:Imagery&STYLE=default&TILEMATRIXSET=GoogleMapsCompatible&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image%2Fjpeg&apikey=YOUR_API_KEY', {
+                attribution: 'Maxar • 2024-01-20 • 50см/пиксель',
+                name: 'Maxar',
+                date: '2024-01-20',
+                resolution: '50см/пиксель'
+            })
+        };
 
         // Add street layer
         this.streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'OpenStreetMap'
+            attribution: 'OpenStreetMap • 2024-01-25',
+            name: 'OpenStreetMap',
+            date: '2024-01-25',
+            resolution: '19м/пиксель'
         });
 
         // Add terrain layer
         this.terrainLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-            attribution: 'OpenTopoMap'
+            attribution: 'OpenTopoMap • 2024-01-20',
+            name: 'OpenTopoMap',
+            date: '2024-01-20',
+            resolution: '25м/пиксель'
         });
 
-        // Start with satellite
-        this.satelliteLayer.addTo(this.map);
+        // Start with Landsat-9
+        this.currentLayer = 'landsat9';
+        this.satelliteLayers.landsat9.addTo(this.map);
+        this.updateSatelliteInfo('landsat9');
 
         // Update coordinates on move
         this.map.on('mousemove', (e) => {
@@ -240,30 +267,85 @@ class DivergentSystem {
 
     toggleMapLayer(layerType) {
         // Remove all layers
-        this.map.removeLayer(this.satelliteLayer);
-        this.map.removeLayer(this.streetLayer);
-        this.map.removeLayer(this.terrainLayer);
+        Object.values(this.satelliteLayers).forEach(layer => {
+            if (this.map.hasLayer(layer)) {
+                this.map.removeLayer(layer);
+            }
+        });
+        if (this.map.hasLayer(this.streetLayer)) {
+            this.map.removeLayer(this.streetLayer);
+        }
+        if (this.map.hasLayer(this.terrainLayer)) {
+            this.map.removeLayer(this.terrainLayer);
+        }
 
         // Update button states
         document.querySelectorAll('.map-btn').forEach(btn => {
             btn.classList.remove('active');
         });
 
-        // Add selected layer
+        // Add selected layer and update info
         switch (layerType) {
             case 'satellite':
-                this.satelliteLayer.addTo(this.map);
+                this.satelliteLayers.landsat9.addTo(this.map);
+                this.currentLayer = 'landsat9';
+                this.updateSatelliteInfo('landsat9');
                 document.getElementById('satellite-toggle').classList.add('active');
+                break;
+            case 'sentinel2':
+                this.satelliteLayers.sentinel2.addTo(this.map);
+                this.currentLayer = 'sentinel2';
+                this.updateSatelliteInfo('sentinel2');
+                document.getElementById('sentinel-toggle').classList.add('active');
+                break;
+            case 'maxar':
+                this.satelliteLayers.maxar.addTo(this.map);
+                this.currentLayer = 'maxar';
+                this.updateSatelliteInfo('maxar');
+                document.getElementById('maxar-toggle').classList.add('active');
                 break;
             case 'street':
                 this.streetLayer.addTo(this.map);
+                this.currentLayer = 'street';
+                this.updateSatelliteInfo('street');
                 document.getElementById('street-toggle').classList.add('active');
                 break;
             case 'terrain':
                 this.terrainLayer.addTo(this.map);
+                this.currentLayer = 'terrain';
+                this.updateSatelliteInfo('terrain');
                 document.getElementById('terrain-toggle').classList.add('active');
                 break;
         }
+    }
+
+    updateSatelliteInfo(layerType) {
+        const satelliteName = document.getElementById('satellite-name');
+        const imageDate = document.getElementById('image-date');
+        const resolution = document.getElementById('resolution');
+
+        let info;
+        switch (layerType) {
+            case 'landsat9':
+                info = this.satelliteLayers.landsat9.options;
+                break;
+            case 'sentinel2':
+                info = this.satelliteLayers.sentinel2.options;
+                break;
+            case 'maxar':
+                info = this.satelliteLayers.maxar.options;
+                break;
+            case 'street':
+                info = this.streetLayer.options;
+                break;
+            case 'terrain':
+                info = this.terrainLayer.options;
+                break;
+        }
+
+        if (satelliteName) satelliteName.textContent = info.name;
+        if (imageDate) imageDate.textContent = info.date;
+        if (resolution) resolution.textContent = info.resolution;
     }
 
     // Compass Functions
@@ -664,4 +746,26 @@ class DivergentSystem {
 let divergentSystem;
 document.addEventListener('DOMContentLoaded', () => {
     divergentSystem = new DivergentSystem();
+    divergentSystem.startClock();
 });
+
+// Clock functionality
+function startClock() {
+    updateClock();
+    setInterval(updateClock, 1000);
+}
+
+function updateClock() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('ru-RU', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    
+    const timeElement = document.getElementById('current-time');
+    if (timeElement) {
+        timeElement.textContent = timeString;
+    }
+}

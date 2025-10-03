@@ -7,8 +7,8 @@
 
 :root {
     --primary-color: #00ff41;
-    --secondary-color: #ff0040;
-    --accent-color: #00ffff;
+    --secondary-color: #ff6b00;
+    --accent-color: #00bfff;
     --warning-color: #ffaa00;
     --danger-color: #ff0040;
     --success-color: #00ff41;
@@ -17,16 +17,20 @@
     --bg-secondary: #1a1a1a;
     --bg-tertiary: #2a2a2a;
     --bg-accent: #001a1a;
+    --bg-military: #0d1b0d;
     
     --text-primary: #ffffff;
     --text-secondary: #cccccc;
     --text-muted: #888888;
+    --text-accent: #00ff41;
     
     --border-color: #333333;
     --border-accent: #00ff41;
+    --border-military: #2d4a2d;
     
     --shadow-color: rgba(0, 255, 65, 0.3);
     --glow-color: rgba(0, 255, 65, 0.5);
+    --military-glow: rgba(0, 191, 255, 0.4);
     
     --font-primary: 'Rajdhani', sans-serif;
     --font-mono: 'Orbitron', monospace;
@@ -202,6 +206,23 @@ body {
     color: var(--text-secondary);
     font-size: 1rem;
     letter-spacing: 1px;
+    margin-bottom: 1rem;
+}
+
+.security-level {
+    margin-top: 1rem;
+}
+
+.security-badge {
+    background: var(--danger-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px var(--danger-color);
+    box-shadow: 0 0 15px rgba(255, 0, 64, 0.3);
 }
 
 .login-form {
@@ -349,6 +370,33 @@ body {
     letter-spacing: 2px;
 }
 
+.mission-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 2rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success-color);
+    box-shadow: 0 0 10px var(--glow-color);
+    animation: statusPulse 2s infinite;
+}
+
+.status-indicator.active {
+    background: var(--success-color);
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
 .header-center .status-indicators {
     display: flex;
     gap: 2rem;
@@ -383,6 +431,22 @@ body {
 
 .user-info i {
     color: var(--primary-color);
+}
+
+.clearance-level {
+    margin-left: 1rem;
+}
+
+.clearance-badge {
+    background: var(--accent-color);
+    color: var(--bg-primary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px var(--military-glow);
+    box-shadow: 0 0 10px var(--military-glow);
 }
 
 .btn-logout {
@@ -518,6 +582,38 @@ body {
     font-family: var(--font-mono);
     font-size: 0.9rem;
     color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.satellite-info {
+    border-top: 1px solid var(--border-military);
+    padding-top: 1rem;
+}
+
+.satellite-name,
+.image-date,
+.resolution {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-accent);
+}
+
+.satellite-name i,
+.image-date i,
+.resolution i {
+    color: var(--accent-color);
+    width: 12px;
+    text-align: center;
+}
+
+.satellite-name span,
+.image-date span,
+.resolution span {
+    color: var(--text-primary);
 }
 
 /* Chats Styles */
@@ -1194,6 +1290,23 @@ body {
     margin-bottom: 1.5rem;
     color: var(--text-secondary);
     font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.priority-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.priority-high {
+    color: var(--danger-color);
+    font-weight: 700;
+    text-shadow: 0 0 10px var(--danger-color);
 }
 
 .results-list {
@@ -1260,6 +1373,18 @@ body {
     border-radius: 12px;
     font-size: 0.8rem;
     font-weight: 500;
+}
+
+.tag.military {
+    background: var(--danger-color);
+    color: white;
+    text-shadow: 0 0 5px rgba(255, 0, 64, 0.5);
+}
+
+.tag.priority {
+    background: var(--warning-color);
+    color: var(--bg-primary);
+    font-weight: 700;
 }
 
 .result-actions {

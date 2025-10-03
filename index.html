@@ -12,19 +12,19 @@
 <body>
     <!-- Loading Screen -->
     <div id="loading-screen" class="loading-screen">
-        <div class="loading-content">
-            <div class="loading-logo">
-                <div class="logo-icon">
-                    <i class="fas fa-crosshairs"></i>
+            <div class="loading-content">
+                <div class="loading-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <h1>ДИВЕРГЕНТ</h1>
+                    <p>Система спутниковой разведки и наблюдения</p>
                 </div>
-                <h1>ДИВЕРГЕНТ</h1>
-                <p>ССРД</p>
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                </div>
+                <div class="loading-text">Инициализация боевых модулей...</div>
             </div>
-            <div class="loading-bar">
-                <div class="loading-progress"></div>
-            </div>
-            <div class="loading-text">Проверка системы...</div>
-        </div>
     </div>
 
     <!-- Login Screen -->
@@ -32,10 +32,13 @@
         <div class="login-container">
             <div class="login-header">
                 <div class="system-logo">
-                    <i class="fas fa-crosshairs"></i>
+                    <i class="fas fa-satellite"></i>
                 </div>
                 <h1>ДИВЕРГЕНТ</h1>
-                <p>ССРД</p>
+                <p>Система спутниковой разведки и наблюдения</p>
+                <div class="security-level">
+                    <span class="security-badge">СЕКРЕТНО</span>
+                </div>
             </div>
             
             <div class="login-form">
@@ -75,8 +78,12 @@
         <header class="system-header">
             <div class="header-left">
                 <div class="system-logo">
-                    <i class="fas fa-crosshairs"></i>
+                    <i class="fas fa-satellite"></i>
                     <span>ДИВЕРГЕНТ</span>
+                </div>
+                <div class="mission-status">
+                    <span class="status-indicator active"></span>
+                    <span>Миссия активна</span>
                 </div>
             </div>
             
@@ -84,23 +91,30 @@
                 <div class="status-indicators">
                     <div class="status-item">
                         <i class="fas fa-satellite"></i>
-                        <span>Спутник: Онлайн</span>
+                        <span>Спутник: Landsat-9</span>
                     </div>
                     <div class="status-item">
                         <i class="fas fa-shield-alt"></i>
-                        <span>Безопасность: Активна</span>
+                        <span>Шифрование: AES-256</span>
                     </div>
                     <div class="status-item">
                         <i class="fas fa-database"></i>
-                        <span>База: Синхронизирована</span>
+                        <span>БД: Синхронизирована</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="current-time">00:00:00</span>
                     </div>
                 </div>
             </div>
             
             <div class="header-right">
                 <div class="user-info">
-                    <i class="fas fa-user-secret"></i>
-                    <span>Оператор</span>
+                    <i class="fas fa-user-shield"></i>
+                    <span>Оператор-аналитик</span>
+                </div>
+                <div class="clearance-level">
+                    <span class="clearance-badge">ДОСТУП 3</span>
                 </div>
                 <button id="logout-btn" class="btn-logout">
                     <i class="fas fa-sign-out-alt"></i>
@@ -112,23 +126,23 @@
         <nav class="system-nav">
             <div class="nav-item active" data-tab="map">
                 <i class="fas fa-map"></i>
-                <span>Карта</span>
+                <span>Спутниковая карта</span>
             </div>
             <div class="nav-item" data-tab="chats">
-                <i class="fas fa-comments"></i>
-                <span>Чаты</span>
+                <i class="fas fa-broadcast-tower"></i>
+                <span>Связь</span>
             </div>
             <div class="nav-item" data-tab="scanner">
-                <i class="fas fa-qrcode"></i>
-                <span>Сканер</span>
+                <i class="fas fa-search"></i>
+                <span>Анализ документов</span>
             </div>
             <div class="nav-item" data-tab="compass">
                 <i class="fas fa-compass"></i>
-                <span>Компас</span>
+                <span>Навигация</span>
             </div>
             <div class="nav-item" data-tab="database">
                 <i class="fas fa-database"></i>
-                <span>База данных</span>
+                <span>База целей</span>
             </div>
         </nav>
 
@@ -139,9 +153,17 @@
                 <div class="map-container">
                     <div id="map" class="map"></div>
                     <div class="map-controls">
-                        <button class="map-btn" id="satellite-toggle">
+                        <button class="map-btn active" id="satellite-toggle">
                             <i class="fas fa-satellite"></i>
-                            Спутник
+                            Landsat-9
+                        </button>
+                        <button class="map-btn" id="sentinel-toggle">
+                            <i class="fas fa-satellite"></i>
+                            Sentinel-2
+                        </button>
+                        <button class="map-btn" id="maxar-toggle">
+                            <i class="fas fa-satellite"></i>
+                            Maxar
                         </button>
                         <button class="map-btn" id="terrain-toggle">
                             <i class="fas fa-mountain"></i>
@@ -157,6 +179,20 @@
                             <span>Широта: <span id="lat">0.0000</span>°</span>
                             <span>Долгота: <span id="lng">0.0000</span>°</span>
                         </div>
+                        <div class="satellite-info">
+                            <div class="satellite-name">
+                                <i class="fas fa-satellite"></i>
+                                <span id="satellite-name">Landsat-9</span>
+                            </div>
+                            <div class="image-date">
+                                <i class="fas fa-calendar"></i>
+                                <span>Дата снимка: <span id="image-date">2024-01-15</span></span>
+                            </div>
+                            <div class="resolution">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                                <span>Разрешение: <span id="resolution">30м/пиксель</span></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -166,7 +202,7 @@
                 <div class="chats-container">
                     <div class="chats-sidebar">
                         <div class="chats-header">
-                            <h3>Чаты</h3>
+                            <h3>Военные каналы</h3>
                             <button class="btn-new-chat">
                                 <i class="fas fa-plus"></i>
                             </button>
@@ -174,29 +210,39 @@
                         <div class="chats-list">
                             <div class="chat-item active">
                                 <div class="chat-avatar">
-                                    <i class="fas fa-users"></i>
+                                    <i class="fas fa-broadcast-tower"></i>
                                 </div>
                                 <div class="chat-info">
-                                    <div class="chat-name">Командный канал</div>
-                                    <div class="chat-last-message">Последнее сообщение...</div>
+                                    <div class="chat-name">Центр управления</div>
+                                    <div class="chat-last-message">Система разведки активна</div>
                                 </div>
                                 <div class="chat-time">12:34</div>
                             </div>
                             <div class="chat-item">
                                 <div class="chat-avatar">
-                                    <i class="fas fa-user"></i>
+                                    <i class="fas fa-satellite"></i>
                                 </div>
                                 <div class="chat-info">
-                                    <div class="chat-name">Агент 007</div>
-                                    <div class="chat-last-message">Данные получены</div>
+                                    <div class="chat-name">Спутниковая группа</div>
+                                    <div class="chat-last-message">Landsat-9: сигнал отличный</div>
                                 </div>
-                                <div class="chat-time">11:22</div>
+                                <div class="chat-time">12:30</div>
+                            </div>
+                            <div class="chat-item">
+                                <div class="chat-avatar">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="chat-info">
+                                    <div class="chat-name">Отдел безопасности</div>
+                                    <div class="chat-last-message">Шифрование AES-256 активно</div>
+                                </div>
+                                <div class="chat-time">12:25</div>
                             </div>
                         </div>
                     </div>
                     <div class="chat-main">
                         <div class="chat-header">
-                            <div class="chat-title">Командный канал</div>
+                            <div class="chat-title">Центр управления • СЕКРЕТНО</div>
                             <div class="chat-actions">
                                 <button class="chat-action">
                                     <i class="fas fa-phone"></i>
@@ -210,21 +256,34 @@
                             </div>
                         </div>
                         <div class="chat-messages">
-                            <div class="message">
+                            <div class="message system">
+                                <div class="message-content">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Система ДИВЕРГЕНТ инициализирована • Уровень доступа: 3</span>
+                                </div>
+                                <div class="message-time">12:34:15</div>
+                            </div>
+                            <div class="message incoming">
                                 <div class="message-avatar">
-                                    <i class="fas fa-user-shield"></i>
+                                    <i class="fas fa-broadcast-tower"></i>
                                 </div>
                                 <div class="message-content">
                                     <div class="message-header">
-                                        <span class="message-sender">Командир</span>
-                                        <span class="message-time">12:34</span>
+                                        <span class="message-sender">Центр управления</span>
+                                        <span class="message-time">12:34:20</span>
                                     </div>
-                                    <div class="message-text">Все агенты, готовьтесь к операции</div>
+                                    <div class="message-text">Все боевые модули загружены. Спутниковая разведка активна. Ожидаю ваших команд.</div>
+                                </div>
+                            </div>
+                            <div class="message outgoing">
+                                <div class="message-content">
+                                    <div class="message-text">Подтверждаю. Начинаю анализ спутниковых данных. Landsat-9 показывает отличное качество снимков.</div>
+                                    <div class="message-time">12:34:25</div>
                                 </div>
                             </div>
                         </div>
                         <div class="chat-input">
-                            <input type="text" placeholder="Введите сообщение...">
+                            <input type="text" placeholder="Введите команду...">
                             <button class="btn-send">
                                 <i class="fas fa-paper-plane"></i>
                             </button>
@@ -336,15 +395,15 @@
             <div id="database-tab" class="tab-content">
                 <div class="database-container">
                     <div class="database-header">
-                        <h3>База данных</h3>
+                        <h3>База целей</h3>
                         <div class="database-actions">
                             <button class="btn-database" id="upload-database">
                                 <i class="fas fa-upload"></i>
-                                Загрузить базу
+                                Загрузить данные
                             </button>
                             <button class="btn-database" id="export-database">
                                 <i class="fas fa-download"></i>
-                                Экспорт
+                                Экспорт отчета
                             </button>
                         </div>
                     </div>
@@ -352,14 +411,15 @@
                     <div class="database-main">
                         <div class="database-search">
                             <div class="search-box">
-                                <input type="text" id="database-search" placeholder="Поиск по базе данных...">
+                                <input type="text" id="database-search" placeholder="Поиск целей...">
                                 <i class="fas fa-search"></i>
                             </div>
                             <div class="search-filters">
                                 <select id="filter-type">
                                     <option value="all">Все типы</option>
-                                    <option value="person">Персоны</option>
-                                    <option value="location">Места</option>
+                                    <option value="military">Военные объекты</option>
+                                    <option value="infrastructure">Инфраструктура</option>
+                                    <option value="personnel">Персонал</option>
                                     <option value="vehicle">Транспорт</option>
                                 </select>
                             </div>
@@ -367,19 +427,20 @@
                         
                         <div class="database-results">
                             <div class="results-header">
-                                <span>Найдено: <span id="results-count">0</span> записей</span>
+                                <span>Найдено: <span id="results-count">0</span> целей</span>
+                                <span class="priority-indicator">Приоритет: <span class="priority-high">Высокий</span></span>
                             </div>
                             <div class="results-list" id="database-results">
                                 <div class="result-item">
                                     <div class="result-icon">
-                                        <i class="fas fa-user"></i>
+                                        <i class="fas fa-crosshairs"></i>
                                     </div>
                                     <div class="result-content">
-                                        <div class="result-title">Иванов Иван Иванович</div>
-                                        <div class="result-subtitle">ID: 12345 | Статус: Активен</div>
+                                        <div class="result-title">Военный объект "Альфа"</div>
+                                        <div class="result-subtitle">ID: MIL-001 | Статус: Под наблюдением</div>
                                         <div class="result-tags">
-                                            <span class="tag">Персона</span>
-                                            <span class="tag">Москва</span>
+                                            <span class="tag military">Военный объект</span>
+                                            <span class="tag priority">Высокий приоритет</span>
                                         </div>
                                     </div>
                                     <div class="result-actions">
