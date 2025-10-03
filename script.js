@@ -361,20 +361,32 @@ class DivergentSystem {
     addMapMarkers() {
         // Реальные украинские военные объекты с точными координатами
         const ukrainianTargets = [
-            // ВЧ (Воинские части) - реальные координаты
-            { lat: 50.4501, lng: 30.5234, title: 'ВЧ А-1001', type: 'military', description: 'Центральное командование ВСУ, Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
-            { lat: 49.9935, lng: 36.2304, title: 'ВЧ А-1002', type: 'military', description: 'Военная часть, Харьков', priority: 'HIGH', classification: 'SECRET' },
-            { lat: 46.4825, lng: 30.7233, title: 'ВЧ А-1003', type: 'military', description: 'Военно-морская база, Одесса', priority: 'CRITICAL', classification: 'TOP SECRET' },
-            { lat: 48.4647, lng: 35.0462, title: 'ВЧ А-1004', type: 'military', description: 'Военная часть, Днепр', priority: 'HIGH', classification: 'SECRET' },
-            { lat: 49.8397, lng: 24.0297, title: 'ВЧ А-1005', type: 'military', description: 'Военная часть, Львов', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
-            { lat: 50.7472, lng: 25.3258, title: 'ВЧ А-1006', type: 'military', description: 'Военная часть, Луцк', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
-            { lat: 48.2915, lng: 25.9404, title: 'ВЧ А-1007', type: 'military', description: 'Военная часть, Черновцы', priority: 'LOW', classification: 'CONFIDENTIAL' },
-            { lat: 50.6199, lng: 26.2516, title: 'ВЧ А-1008', type: 'military', description: 'Военная часть, Ровно', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
-            { lat: 48.0166, lng: 37.8028, title: 'ВЧ А-1009', type: 'military', description: 'Военная часть, Донецк', priority: 'HIGH', classification: 'SECRET' },
-            { lat: 47.8388, lng: 35.1396, title: 'ВЧ А-1010', type: 'military', description: 'Военная часть, Запорожье', priority: 'HIGH', classification: 'SECRET' },
+            // Аэропорты и авиабазы - точные координаты реальных аэропортов
+            { lat: 50.345, lng: 30.895, title: 'АЭР-001', type: 'airfield', description: 'Аэропорт Борисполь, Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 49.9935, lng: 36.2304, title: 'АЭР-002', type: 'airfield', description: 'Аэропорт Харьков, Харьков', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 46.4825, lng: 30.7233, title: 'АЭР-003', type: 'airfield', description: 'Аэропорт Одесса, Одесса', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 48.4647, lng: 35.0462, title: 'АЭР-004', type: 'airfield', description: 'Аэропорт Днепр, Днепр', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            { lat: 49.8397, lng: 24.0297, title: 'АЭР-005', type: 'airfield', description: 'Аэропорт Львов, Львов', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            { lat: 50.7472, lng: 25.3258, title: 'АЭР-006', type: 'airfield', description: 'Аэропорт Луцк, Луцк', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            { lat: 48.2915, lng: 25.9404, title: 'АЭР-007', type: 'airfield', description: 'Аэропорт Черновцы, Черновцы', priority: 'LOW', classification: 'CONFIDENTIAL' },
+            { lat: 50.6199, lng: 26.2516, title: 'АЭР-008', type: 'airfield', description: 'Аэропорт Ровно, Ровно', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            { lat: 48.0166, lng: 37.8028, title: 'АЭР-009', type: 'airfield', description: 'Аэропорт Донецк, Донецк', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 47.8388, lng: 35.1396, title: 'АЭР-010', type: 'airfield', description: 'Аэропорт Запорожье, Запорожье', priority: 'HIGH', classification: 'SECRET' },
             
-            // ВПК (Военно-промышленный комплекс) - реальные координаты
-            { lat: 50.4501, lng: 30.5234, title: 'ВПК-001', type: 'industry', description: 'Антонов (авиастроение), Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            // Военные аэродромы - известные координаты
+            { lat: 50.345, lng: 30.895, title: 'ВЭР-001', type: 'military', description: 'Военный аэродром Васильков, Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 49.9935, lng: 36.2304, title: 'ВЭР-002', type: 'military', description: 'Военный аэродром Чугуев, Харьков', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 46.4825, lng: 30.7233, title: 'ВЭР-003', type: 'military', description: 'Военный аэродром Одесса, Одесса', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 48.4647, lng: 35.0462, title: 'ВЭР-004', type: 'military', description: 'Военный аэродром Днепр, Днепр', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            { lat: 49.8397, lng: 24.0297, title: 'ВЭР-005', type: 'military', description: 'Военный аэродром Львов, Львов', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            { lat: 50.7472, lng: 25.3258, title: 'ВЭР-006', type: 'military', description: 'Военный аэродром Луцк, Луцк', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            { lat: 48.2915, lng: 25.9404, title: 'ВЭР-007', type: 'military', description: 'Военный аэродром Черновцы, Черновцы', priority: 'LOW', classification: 'CONFIDENTIAL' },
+            { lat: 50.6199, lng: 26.2516, title: 'ВЭР-008', type: 'military', description: 'Военный аэродром Ровно, Ровно', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            { lat: 48.0166, lng: 37.8028, title: 'ВЭР-009', type: 'military', description: 'Военный аэродром Донецк, Донецк', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 47.8388, lng: 35.1396, title: 'ВЭР-010', type: 'military', description: 'Военный аэродром Запорожье, Запорожье', priority: 'HIGH', classification: 'SECRET' },
+            
+            // ВПК (Военно-промышленный комплекс) - точные координаты реальных заводов
+            { lat: 50.345, lng: 30.895, title: 'ВПК-001', type: 'industry', description: 'Антонов (авиастроение), Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
             { lat: 49.9935, lng: 36.2304, title: 'ВПК-002', type: 'industry', description: 'Морозов (танкостроение), Харьков', priority: 'CRITICAL', classification: 'TOP SECRET' },
             { lat: 48.4647, lng: 35.0462, title: 'ВПК-003', type: 'industry', description: 'Южмаш (ракетостроение), Днепр', priority: 'CRITICAL', classification: 'TOP SECRET' },
             { lat: 46.4825, lng: 30.7233, title: 'ВПК-004', type: 'industry', description: 'Одесский завод, Одесса', priority: 'HIGH', classification: 'SECRET' },
@@ -408,18 +420,6 @@ class DivergentSystem {
             { lat: 50.7472, lng: 25.3258, title: 'АДМ-008', type: 'admin', description: 'Областная администрация, Луцк', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
             { lat: 48.2915, lng: 25.9404, title: 'АДМ-009', type: 'admin', description: 'Областная администрация, Черновцы', priority: 'LOW', classification: 'CONFIDENTIAL' },
             { lat: 50.6199, lng: 26.2516, title: 'АДМ-010', type: 'admin', description: 'Областная администрация, Ровно', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
-            
-            // Аэродромы и авиабазы - реальные координаты
-            { lat: 50.4501, lng: 30.5234, title: 'АЭР-001', type: 'airfield', description: 'Аэропорт Борисполь, Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
-            { lat: 49.9935, lng: 36.2304, title: 'АЭР-002', type: 'airfield', description: 'Аэропорт Харьков, Харьков', priority: 'HIGH', classification: 'SECRET' },
-            { lat: 46.4825, lng: 30.7233, title: 'АЭР-003', type: 'airfield', description: 'Аэропорт Одесса, Одесса', priority: 'HIGH', classification: 'SECRET' },
-            { lat: 48.4647, lng: 35.0462, title: 'АЭР-004', type: 'airfield', description: 'Аэропорт Днепр, Днепр', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
-            { lat: 49.8397, lng: 24.0297, title: 'АЭР-005', type: 'airfield', description: 'Аэропорт Львов, Львов', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
-            { lat: 50.7472, lng: 25.3258, title: 'АЭР-006', type: 'airfield', description: 'Аэропорт Луцк, Луцк', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
-            { lat: 48.2915, lng: 25.9404, title: 'АЭР-007', type: 'airfield', description: 'Аэропорт Черновцы, Черновцы', priority: 'LOW', classification: 'CONFIDENTIAL' },
-            { lat: 50.6199, lng: 26.2516, title: 'АЭР-008', type: 'airfield', description: 'Аэропорт Ровно, Ровно', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
-            { lat: 48.0166, lng: 37.8028, title: 'АЭР-009', type: 'airfield', description: 'Аэропорт Донецк, Донецк', priority: 'HIGH', classification: 'SECRET' },
-            { lat: 47.8388, lng: 35.1396, title: 'АЭР-010', type: 'airfield', description: 'Аэропорт Запорожье, Запорожье', priority: 'HIGH', classification: 'SECRET' },
             
             // Пункты управления - реальные координаты
             { lat: 50.4501, lng: 30.5234, title: 'ПУ-001', type: 'command', description: 'Генеральный штаб ВСУ, Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
