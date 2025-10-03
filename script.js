@@ -281,7 +281,7 @@ class DivergentSystem {
     initializeMap() {
         if (this.map) return;
 
-        this.map = L.map('map').setView([55.7558, 37.6176], 10);
+        this.map = L.map('map').setView([50.4501, 30.5234], 6);
 
         // Military-grade satellite imagery sources
         this.satelliteLayers = {
@@ -359,24 +359,134 @@ class DivergentSystem {
     }
 
     addMapMarkers() {
-        const markers = [
-            { lat: 55.7558, lng: 37.6176, title: 'Центр Москвы', type: 'location' },
-            { lat: 55.7522, lng: 37.6156, title: 'Красная площадь', type: 'landmark' },
-            { lat: 55.7512, lng: 37.6184, title: 'Кремль', type: 'landmark' }
+        // Украинские военные объекты
+        const ukrainianTargets = [
+            // ВЧ (Воинские части)
+            { lat: 50.4501, lng: 30.5234, title: 'ВЧ А-1001', type: 'military', description: 'Центральное командование ВСУ, Киев', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 49.9935, lng: 36.2304, title: 'ВЧ А-1002', type: 'military', description: 'Военная часть, Харьков', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 46.4825, lng: 30.7233, title: 'ВЧ А-1003', type: 'military', description: 'Военно-морская база, Одесса', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 48.4647, lng: 35.0462, title: 'ВЧ А-1004', type: 'military', description: 'Военная часть, Днепр', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 49.8397, lng: 24.0297, title: 'ВЧ А-1005', type: 'military', description: 'Военная часть, Львов', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            
+            // ВПК (Военно-промышленный комплекс)
+            { lat: 50.4501, lng: 30.5234, title: 'ВПК-001', type: 'industry', description: 'Антонов (авиастроение), Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 49.9935, lng: 36.2304, title: 'ВПК-002', type: 'industry', description: 'Морозов (танкостроение), Харьков', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 48.4647, lng: 35.0462, title: 'ВПК-003', type: 'industry', description: 'Южмаш (ракетостроение), Днепр', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 46.4825, lng: 30.7233, title: 'ВПК-004', type: 'industry', description: 'Одесский завод, Одесса', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 49.8397, lng: 24.0297, title: 'ВПК-005', type: 'industry', description: 'Львовский завод, Львов', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            
+            // Стратегические мосты
+            { lat: 50.4501, lng: 30.5234, title: 'МОСТ-001', type: 'bridge', description: 'Мост Патона, Киев', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 49.9935, lng: 36.2304, title: 'МОСТ-002', type: 'bridge', description: 'Метромост, Харьков', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 48.4647, lng: 35.0462, title: 'МОСТ-003', type: 'bridge', description: 'Мост через Днепр, Днепр', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 46.4825, lng: 30.7233, title: 'МОСТ-004', type: 'bridge', description: 'Мост через Днестр, Одесса', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 49.8397, lng: 24.0297, title: 'МОСТ-005', type: 'bridge', description: 'Мост через Западный Буг, Львов', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            
+            // Административные здания
+            { lat: 50.4501, lng: 30.5234, title: 'АДМ-001', type: 'admin', description: 'Верховная Рада, Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 50.4501, lng: 30.5234, title: 'АДМ-002', type: 'admin', description: 'Кабинет Министров, Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 50.4501, lng: 30.5234, title: 'АДМ-003', type: 'admin', description: 'СБУ, Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 49.9935, lng: 36.2304, title: 'АДМ-004', type: 'admin', description: 'Областная администрация, Харьков', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 48.4647, lng: 35.0462, title: 'АДМ-005', type: 'admin', description: 'Областная администрация, Днепр', priority: 'HIGH', classification: 'SECRET' },
+            
+            // Аэродромы и авиабазы
+            { lat: 50.4501, lng: 30.5234, title: 'АЭР-001', type: 'airfield', description: 'Аэропорт Борисполь, Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 49.9935, lng: 36.2304, title: 'АЭР-002', type: 'airfield', description: 'Аэропорт Харьков, Харьков', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 46.4825, lng: 30.7233, title: 'АЭР-003', type: 'airfield', description: 'Аэропорт Одесса, Одесса', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 48.4647, lng: 35.0462, title: 'АЭР-004', type: 'airfield', description: 'Аэропорт Днепр, Днепр', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            { lat: 49.8397, lng: 24.0297, title: 'АЭР-005', type: 'airfield', description: 'Аэропорт Львов, Львов', priority: 'MEDIUM', classification: 'CONFIDENTIAL' },
+            
+            // Пункты управления
+            { lat: 50.4501, lng: 30.5234, title: 'ПУ-001', type: 'command', description: 'Генеральный штаб ВСУ, Киев', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 49.9935, lng: 36.2304, title: 'ПУ-002', type: 'command', description: 'Командование СВО, Харьков', priority: 'CRITICAL', classification: 'TOP SECRET' },
+            { lat: 48.4647, lng: 35.0462, title: 'ПУ-003', type: 'command', description: 'Центр управления, Днепр', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 46.4825, lng: 30.7233, title: 'ПУ-004', type: 'command', description: 'Морское командование, Одесса', priority: 'HIGH', classification: 'SECRET' },
+            { lat: 49.8397, lng: 24.0297, title: 'ПУ-005', type: 'command', description: 'Западное командование, Львов', priority: 'MEDIUM', classification: 'CONFIDENTIAL' }
         ];
 
-        markers.forEach(marker => {
-            const icon = L.divIcon({
-                className: 'custom-marker',
-                html: `<div class="marker-${marker.type}"><i class="fas fa-${marker.type === 'location' ? 'map-marker-alt' : 'building'}"></i></div>`,
-                iconSize: [30, 30],
-                iconAnchor: [15, 15]
-            });
-
-            L.marker([marker.lat, marker.lng], { icon })
-                .addTo(this.map)
-                .bindPopup(marker.title);
+        ukrainianTargets.forEach(target => {
+            const marker = L.marker([target.lat, target.lng], {
+                icon: this.getMarkerIcon(target.type, target.priority)
+            }).addTo(this.map);
+            
+            const popupContent = `
+                <div class="target-popup">
+                    <div class="target-header">
+                        <h3>${target.title}</h3>
+                        <span class="priority-badge ${target.priority.toLowerCase()}">${target.priority}</span>
+                    </div>
+                    <div class="target-info">
+                        <p><strong>Описание:</strong> ${target.description}</p>
+                        <p><strong>Тип:</strong> ${this.getTypeName(target.type)}</p>
+                        <p><strong>Классификация:</strong> <span class="classification ${target.classification.toLowerCase().replace(' ', '-')}">${target.classification}</span></p>
+                        <p><strong>Координаты:</strong> ${target.lat.toFixed(4)}°N, ${target.lng.toFixed(4)}°E</p>
+                        <p><strong>Статус:</strong> <span class="status-active">ПОД НАБЛЮДЕНИЕМ</span></p>
+                    </div>
+                    <div class="target-actions">
+                        <button class="btn-action" onclick="divergentSystem.showTargetDetails('${target.title}')">
+                            <i class="fas fa-eye"></i> Детали
+                        </button>
+                        <button class="btn-action" onclick="divergentSystem.trackTarget('${target.title}')">
+                            <i class="fas fa-crosshairs"></i> Отследить
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            marker.bindPopup(popupContent);
         });
+    }
+
+    getMarkerIcon(type, priority) {
+        const colors = {
+            'CRITICAL': '#ff0040',
+            'HIGH': '#ff6b00',
+            'MEDIUM': '#ffaa00',
+            'LOW': '#00ff41'
+        };
+        
+        const icons = {
+            'military': 'fa-shield-alt',
+            'industry': 'fa-industry',
+            'bridge': 'fa-bridge',
+            'admin': 'fa-building',
+            'airfield': 'fa-plane',
+            'command': 'fa-broadcast-tower'
+        };
+        
+        const color = colors[priority] || '#00ff41';
+        const icon = icons[type] || 'fa-crosshairs';
+        
+        return L.divIcon({
+            className: 'custom-marker',
+            html: `<div class="marker-icon" style="background-color: ${color};">
+                <i class="fas ${icon}"></i>
+            </div>`,
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+        });
+    }
+
+    getTypeName(type) {
+        const types = {
+            'military': 'Воинская часть',
+            'industry': 'ВПК',
+            'bridge': 'Мост',
+            'admin': 'Администрация',
+            'airfield': 'Аэродром',
+            'command': 'Пункт управления'
+        };
+        return types[type] || 'Неизвестно';
+    }
+
+    showTargetDetails(targetName) {
+        this.showNotification(`Детали цели: ${targetName}`, 'info');
+        // Здесь можно добавить модальное окно с детальной информацией
+    }
+
+    trackTarget(targetName) {
+        this.showNotification(`Отслеживание цели: ${targetName}`, 'success');
+        // Здесь можно добавить функцию отслеживания цели
     }
 
     toggleMapLayer(layerType) {

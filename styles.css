@@ -1687,6 +1687,166 @@ body {
     font-family: var(--font-mono);
 }
 
+/* Military Markers and Popups */
+.custom-marker {
+    background: none !important;
+    border: none !important;
+}
+
+.marker-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-primary);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    animation: markerPulse 2s infinite;
+}
+
+.marker-icon i {
+    color: var(--bg-primary);
+    font-size: 14px;
+}
+
+@keyframes markerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.target-popup {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-dark);
+    border-radius: 4px;
+    padding: 12px;
+    min-width: 300px;
+    font-family: var(--font-mono);
+}
+
+.target-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.target-header h3 {
+    color: var(--primary-color);
+    font-size: var(--font-size-large);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.priority-badge {
+    padding: 4px 8px;
+    border-radius: 2px;
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.priority-badge.critical {
+    background: var(--danger-color);
+    color: var(--bg-primary);
+}
+
+.priority-badge.high {
+    background: var(--secondary-color);
+    color: var(--bg-primary);
+}
+
+.priority-badge.medium {
+    background: var(--warning-color);
+    color: var(--bg-primary);
+}
+
+.priority-badge.low {
+    background: var(--success-color);
+    color: var(--bg-primary);
+}
+
+.target-info {
+    margin-bottom: 12px;
+}
+
+.target-info p {
+    margin: 6px 0;
+    font-size: var(--font-size-small);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.target-info strong {
+    color: var(--text-primary);
+}
+
+.classification {
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.classification.top-secret {
+    background: var(--danger-color);
+    color: var(--bg-primary);
+}
+
+.classification.secret {
+    background: var(--secondary-color);
+    color: var(--bg-primary);
+}
+
+.classification.confidential {
+    background: var(--warning-color);
+    color: var(--bg-primary);
+}
+
+.status-active {
+    color: var(--success-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.target-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.btn-action {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: var(--font-size-small);
+    font-family: var(--font-mono);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-action:hover {
+    background: var(--primary-color);
+    color: var(--bg-primary);
+    border-color: var(--primary-color);
+}
+
+.btn-action i {
+    font-size: 0.7rem;
+}
+
 .result-actions {
     display: flex;
     gap: 0.5rem;
