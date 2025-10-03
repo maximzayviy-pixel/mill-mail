@@ -27,9 +27,31 @@
                         <li><a href="#about" class="nav-link">О сервисе</a></li>
                         <li><a href="#features" class="nav-link">Возможности</a></li>
                         <li><a href="#register" class="nav-link">Регистрация</a></li>
+                        <li><a href="#profile" class="nav-link" id="profile-link" style="display: none;">Профиль</a></li>
                         <li><a href="#contacts" class="nav-link">Контакты</a></li>
                     </ul>
                 </nav>
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <div class="user-avatar" id="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <div class="user-info">
+                            <div class="user-name" id="user-name">Пользователь</div>
+                            <div class="user-email" id="user-email">user@mill-gov.ru</div>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#profile" class="dropdown-item">
+                                <i class="fas fa-user-cog"></i>
+                                Настройки профиля
+                            </a>
+                            <a href="#logout" class="dropdown-item" id="logout-btn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Выйти
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -212,6 +234,170 @@
                             <div class="step-content">
                                 <h4>Получите доступ</h4>
                                 <p>После подтверждения вы получите доступ к своему @mill-gov.ru</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile" class="profile" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Мой профиль</h2>
+                <p>Управляйте настройками вашего аккаунта @mill-gov.ru</p>
+            </div>
+            <div class="profile-content">
+                <div class="profile-sidebar">
+                    <div class="profile-card">
+                        <div class="profile-avatar">
+                            <img src="" alt="Аватар" id="profile-avatar-img">
+                            <div class="avatar-overlay">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="profile-name">Имя пользователя</h3>
+                            <p id="profile-email">user@mill-gov.ru</p>
+                            <div class="profile-status">
+                                <span class="status-dot"></span>
+                                <span>Активен</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="emails-sent">0</div>
+                            <div class="stat-label">Писем отправлено</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="storage-used">0</div>
+                            <div class="stat-label">МБ использовано</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="account-age">0</div>
+                            <div class="stat-label">Дней с регистрации</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-main">
+                    <div class="profile-tabs">
+                        <button class="tab-btn active" data-tab="settings">
+                            <i class="fas fa-cog"></i>
+                            Настройки
+                        </button>
+                        <button class="tab-btn" data-tab="security">
+                            <i class="fas fa-shield-alt"></i>
+                            Безопасность
+                        </button>
+                        <button class="tab-btn" data-tab="appearance">
+                            <i class="fas fa-palette"></i>
+                            Внешний вид
+                        </button>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-panel active" id="settings-tab">
+                            <h3>Основные настройки</h3>
+                            <form class="profile-form">
+                                <div class="form-group">
+                                    <label for="profile-fullname">Полное имя</label>
+                                    <input type="text" id="profile-fullname" name="fullname" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-organization">Организация</label>
+                                    <input type="text" id="profile-organization" name="organization" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-bio">О себе</label>
+                                    <textarea id="profile-bio" name="bio" rows="4" placeholder="Расскажите о себе..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-timezone">Часовой пояс</label>
+                                    <select id="profile-timezone" name="timezone">
+                                        <option value="UTC+3">Москва (UTC+3)</option>
+                                        <option value="UTC+2">Калининград (UTC+2)</option>
+                                        <option value="UTC+4">Самара (UTC+4)</option>
+                                        <option value="UTC+5">Екатеринбург (UTC+5)</option>
+                                        <option value="UTC+6">Омск (UTC+6)</option>
+                                        <option value="UTC+7">Красноярск (UTC+7)</option>
+                                        <option value="UTC+8">Иркутск (UTC+8)</option>
+                                        <option value="UTC+9">Якутск (UTC+9)</option>
+                                        <option value="UTC+10">Владивосток (UTC+10)</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    Сохранить изменения
+                                </button>
+                            </form>
+                        </div>
+                        <div class="tab-panel" id="security-tab">
+                            <h3>Безопасность</h3>
+                            <div class="security-settings">
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h4>Пароль</h4>
+                                        <p>Последнее изменение: никогда</p>
+                                    </div>
+                                    <button class="btn btn-secondary" id="change-password">
+                                        <i class="fas fa-key"></i>
+                                        Изменить пароль
+                                    </button>
+                                </div>
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h4>Двухфакторная аутентификация</h4>
+                                        <p>Дополнительная защита вашего аккаунта</p>
+                                    </div>
+                                    <button class="btn btn-secondary" id="enable-2fa">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        Включить 2FA
+                                    </button>
+                                </div>
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h4>Активные сессии</h4>
+                                        <p>Управление устройствами с доступом к аккаунту</p>
+                                    </div>
+                                    <button class="btn btn-secondary" id="manage-sessions">
+                                        <i class="fas fa-desktop"></i>
+                                        Управление сессиями
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-panel" id="appearance-tab">
+                            <h3>Внешний вид</h3>
+                            <div class="appearance-settings">
+                                <div class="setting-group">
+                                    <label for="theme-select">Тема оформления</label>
+                                    <select id="theme-select" name="theme">
+                                        <option value="dark">Тёмная</option>
+                                        <option value="light">Светлая</option>
+                                        <option value="auto">Автоматически</option>
+                                    </select>
+                                </div>
+                                <div class="setting-group">
+                                    <label for="accent-color">Акцентный цвет</label>
+                                    <div class="color-picker">
+                                        <input type="color" id="accent-color" value="#667eea">
+                                        <div class="color-presets">
+                                            <div class="color-preset" data-color="#667eea" style="background: #667eea;"></div>
+                                            <div class="color-preset" data-color="#ff6b6b" style="background: #ff6b6b;"></div>
+                                            <div class="color-preset" data-color="#4ecdc4" style="background: #4ecdc4;"></div>
+                                            <div class="color-preset" data-color="#45b7d1" style="background: #45b7d1;"></div>
+                                            <div class="color-preset" data-color="#96ceb4" style="background: #96ceb4;"></div>
+                                            <div class="color-preset" data-color="#feca57" style="background: #feca57;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="setting-group">
+                                    <label for="font-size">Размер шрифта</label>
+                                    <input type="range" id="font-size" min="12" max="18" value="14">
+                                    <span class="font-size-value">14px</span>
+                                </div>
                             </div>
                         </div>
                     </div>
