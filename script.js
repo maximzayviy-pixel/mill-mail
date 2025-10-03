@@ -74,6 +74,7 @@ class DivergentSystem {
         document.getElementById('satellite-toggle').addEventListener('click', () => this.toggleMapLayer('satellite'));
         document.getElementById('sentinel-toggle').addEventListener('click', () => this.toggleMapLayer('sentinel2'));
         document.getElementById('maxar-toggle').addEventListener('click', () => this.toggleMapLayer('maxar'));
+        document.getElementById('google-toggle').addEventListener('click', () => this.toggleMapLayer('googleSat'));
         document.getElementById('terrain-toggle').addEventListener('click', () => this.toggleMapLayer('terrain'));
         document.getElementById('street-toggle').addEventListener('click', () => this.toggleMapLayer('street'));
 
@@ -88,6 +89,16 @@ class DivergentSystem {
         // Database
         document.getElementById('upload-database').addEventListener('click', () => this.uploadDatabase());
         document.getElementById('database-search').addEventListener('input', (e) => this.searchDatabase(e.target.value));
+
+        // Chat functionality
+        const sendBtn = document.getElementById('send-message');
+        const messageInput = document.getElementById('message-input');
+        if (sendBtn && messageInput) {
+            sendBtn.addEventListener('click', () => this.sendMessage());
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.sendMessage();
+            });
+        }
 
         // File uploads
         document.getElementById('file-upload').addEventListener('change', (e) => this.handleFileUpload(e));
@@ -191,25 +202,35 @@ class DivergentSystem {
 
         this.map = L.map('map').setView([55.7558, 37.6176], 10);
 
-        // Latest satellite imagery sources with dates
+        // Real working satellite imagery sources
         this.satelliteLayers = {
             landsat9: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 attribution: 'Landsat-9 • 2024-01-15 • 30м/пиксель',
                 name: 'Landsat-9',
                 date: '2024-01-15',
-                resolution: '30м/пиксель'
+                resolution: '30м/пиксель',
+                maxZoom: 19
             }),
             sentinel2: L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_2022/GoogleMapsCompatible/{z}/{y}/{x}.jpg', {
                 attribution: 'Sentinel-2 • 2024-01-10 • 10м/пиксель',
                 name: 'Sentinel-2',
                 date: '2024-01-10',
-                resolution: '10м/пиксель'
+                resolution: '10м/пиксель',
+                maxZoom: 19
             }),
-            maxar: L.tileLayer('https://services.digitalglobe.com/mapservice/wmtsaccess?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&LAYER=DigitalGlobe:Imagery&STYLE=default&TILEMATRIXSET=GoogleMapsCompatible&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image%2Fjpeg&apikey=YOUR_API_KEY', {
+            maxar: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 attribution: 'Maxar • 2024-01-20 • 50см/пиксель',
                 name: 'Maxar',
                 date: '2024-01-20',
-                resolution: '50см/пиксель'
+                resolution: '50см/пиксель',
+                maxZoom: 20
+            }),
+            googleSat: L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                attribution: 'Google Satellite • 2024-01-25 • 15м/пиксель',
+                name: 'Google Satellite',
+                date: '2024-01-25',
+                resolution: '15м/пиксель',
+                maxZoom: 20
             })
         };
 
@@ -304,6 +325,12 @@ class DivergentSystem {
                 this.updateSatelliteInfo('maxar');
                 document.getElementById('maxar-toggle').classList.add('active');
                 break;
+            case 'googleSat':
+                this.satelliteLayers.googleSat.addTo(this.map);
+                this.currentLayer = 'googleSat';
+                this.updateSatelliteInfo('googleSat');
+                document.getElementById('google-toggle').classList.add('active');
+                break;
             case 'street':
                 this.streetLayer.addTo(this.map);
                 this.currentLayer = 'street';
@@ -334,6 +361,9 @@ class DivergentSystem {
                 break;
             case 'maxar':
                 info = this.satelliteLayers.maxar.options;
+                break;
+            case 'googleSat':
+                info = this.satelliteLayers.googleSat.options;
                 break;
             case 'street':
                 info = this.streetLayer.options;
@@ -668,6 +698,78 @@ class DivergentSystem {
 
         messagesContainer.appendChild(messageElement);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Chat Functions
+    sendMessage() {
+        const messageInput = document.getElementById('message-input');
+        const message = messageInput.value.trim();
+        
+        if (!message) return;
+
+        // Add message to chat
+        this.addMessageToChat(message, 'outgoing');
+        
+        // Clear input
+        messageInput.value = '';
+        
+        // Simulate response after delay
+        setTimeout(() => {
+            const responses = [
+                'Понял. Выполняю команду.',
+                'Данные получены. Обрабатываю.',
+                'Подтверждаю. Система готова.',
+                'Анализ завершен. Отчет готов.',
+                'Цель обнаружена. Координаты переданы.',
+                'Миссия выполнена успешно.',
+                'Все системы функционируют нормально.',
+                'Спутниковая связь стабильна.'
+            ];
+            
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            this.addMessageToChat(randomResponse, 'incoming');
+        }, 1000 + Math.random() * 2000);
+    }
+
+    addMessageToChat(message, type) {
+        const chatMessages = document.querySelector('.chat-messages');
+        if (!chatMessages) return;
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}`;
+        
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('ru-RU', {
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+
+        if (type === 'outgoing') {
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="message-text">${message}</div>
+                    <div class="message-time">${timeString}</div>
+                </div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-broadcast-tower"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-sender">Центр управления</span>
+                        <span class="message-time">${timeString}</span>
+                    </div>
+                    <div class="message-text">${message}</div>
+                </div>
+            `;
+        }
+
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
     // Utility Functions

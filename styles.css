@@ -18,22 +18,29 @@
     --bg-tertiary: #2a2a2a;
     --bg-accent: #001a1a;
     --bg-military: #0d1b0d;
+    --bg-panel: #1e1e1e;
     
     --text-primary: #ffffff;
     --text-secondary: #cccccc;
     --text-muted: #888888;
     --text-accent: #00ff41;
+    --text-warning: #ffaa00;
     
     --border-color: #333333;
     --border-accent: #00ff41;
     --border-military: #2d4a2d;
+    --border-subtle: #444444;
     
     --shadow-color: rgba(0, 255, 65, 0.3);
     --glow-color: rgba(0, 255, 65, 0.5);
     --military-glow: rgba(0, 191, 255, 0.4);
+    --panel-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     
     --font-primary: 'Rajdhani', sans-serif;
     --font-mono: 'Orbitron', monospace;
+    --font-size-small: 0.875rem;
+    --font-size-normal: 1rem;
+    --font-size-large: 1.125rem;
 }
 
 body {
@@ -474,26 +481,30 @@ body {
 }
 
 .nav-item {
-    padding: 1rem 1.5rem;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
     color: var(--text-secondary);
     font-weight: 500;
+    font-size: var(--font-size-small);
+    border-radius: 4px;
+    margin: 2px 0;
 }
 
 .nav-item:hover {
-    background: var(--bg-secondary);
+    background: var(--bg-tertiary);
     color: var(--text-primary);
 }
 
 .nav-item.active {
     color: var(--primary-color);
     border-bottom-color: var(--primary-color);
-    background: var(--bg-secondary);
+    background: var(--bg-tertiary);
+    box-shadow: 0 2px 8px rgba(0, 255, 65, 0.2);
 }
 
 .nav-item i {
@@ -521,6 +532,11 @@ body {
     position: relative;
     height: 100%;
     width: 100%;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--panel-shadow);
+    border: 1px solid var(--border-subtle);
 }
 
 .map {
@@ -539,40 +555,46 @@ body {
 }
 
 .map-btn {
-    background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    padding: 10px 15px;
-    color: var(--text-primary);
+    background: var(--bg-panel);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: var(--text-secondary);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
+    gap: 6px;
+    font-size: var(--font-size-small);
     font-weight: 500;
+    min-width: 80px;
+    justify-content: center;
 }
 
 .map-btn:hover {
     border-color: var(--primary-color);
-    box-shadow: 0 0 15px var(--shadow-color);
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
 }
 
 .map-btn.active {
     border-color: var(--primary-color);
     background: var(--primary-color);
     color: var(--bg-primary);
+    box-shadow: 0 0 10px var(--shadow-color);
 }
 
 .map-info {
     position: absolute;
     bottom: 20px;
     left: 20px;
-    background: var(--bg-secondary);
-    border: 2px solid var(--border-accent);
-    border-radius: 8px;
-    padding: 15px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 12px;
     z-index: 1000;
+    box-shadow: var(--panel-shadow);
+    min-width: 250px;
 }
 
 .coordinates {
@@ -620,22 +642,28 @@ body {
 .chats-container {
     display: flex;
     height: 100%;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--panel-shadow);
+    border: 1px solid var(--border-subtle);
 }
 
 .chats-sidebar {
     width: 300px;
-    background: var(--bg-secondary);
-    border-right: 2px solid var(--border-color);
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
 }
 
 .chats-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background: var(--bg-tertiary);
 }
 
 .chats-header h3 {

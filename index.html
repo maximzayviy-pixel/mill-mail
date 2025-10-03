@@ -23,7 +23,7 @@
                 <div class="loading-bar">
                     <div class="loading-progress"></div>
                 </div>
-                <div class="loading-text">Инициализация боевых модулей...</div>
+                <div class="loading-text">Загрузка системы разведки...</div>
             </div>
     </div>
 
@@ -125,24 +125,24 @@
         <!-- Navigation -->
         <nav class="system-nav">
             <div class="nav-item active" data-tab="map">
-                <i class="fas fa-map"></i>
-                <span>Спутниковая карта</span>
+                <i class="fas fa-satellite"></i>
+                <span>Разведка</span>
             </div>
             <div class="nav-item" data-tab="chats">
                 <i class="fas fa-broadcast-tower"></i>
-                <span>Связь</span>
+                <span>Командование</span>
             </div>
             <div class="nav-item" data-tab="scanner">
-                <i class="fas fa-search"></i>
-                <span>Анализ документов</span>
+                <i class="fas fa-crosshairs"></i>
+                <span>Анализ</span>
             </div>
             <div class="nav-item" data-tab="compass">
-                <i class="fas fa-compass"></i>
+                <i class="fas fa-location-arrow"></i>
                 <span>Навигация</span>
             </div>
             <div class="nav-item" data-tab="database">
                 <i class="fas fa-database"></i>
-                <span>База целей</span>
+                <span>Архив</span>
             </div>
         </nav>
 
@@ -164,6 +164,10 @@
                         <button class="map-btn" id="maxar-toggle">
                             <i class="fas fa-satellite"></i>
                             Maxar
+                        </button>
+                        <button class="map-btn" id="google-toggle">
+                            <i class="fas fa-satellite"></i>
+                            Google
                         </button>
                         <button class="map-btn" id="terrain-toggle">
                             <i class="fas fa-mountain"></i>
@@ -202,7 +206,7 @@
                 <div class="chats-container">
                     <div class="chats-sidebar">
                         <div class="chats-header">
-                            <h3>Военные каналы</h3>
+                            <h3>Командные каналы</h3>
                             <button class="btn-new-chat">
                                 <i class="fas fa-plus"></i>
                             </button>
@@ -395,15 +399,15 @@
             <div id="database-tab" class="tab-content">
                 <div class="database-container">
                     <div class="database-header">
-                        <h3>База целей</h3>
+                        <h3>Архив разведданных</h3>
                         <div class="database-actions">
                             <button class="btn-database" id="upload-database">
                                 <i class="fas fa-upload"></i>
-                                Загрузить данные
+                                Импорт
                             </button>
                             <button class="btn-database" id="export-database">
                                 <i class="fas fa-download"></i>
-                                Экспорт отчета
+                                Экспорт
                             </button>
                         </div>
                     </div>
