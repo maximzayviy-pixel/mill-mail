@@ -75,6 +75,7 @@ class DivergentSystem {
         document.getElementById('sentinel-toggle').addEventListener('click', () => this.toggleMapLayer('sentinel2'));
         document.getElementById('maxar-toggle').addEventListener('click', () => this.toggleMapLayer('maxar'));
         document.getElementById('google-toggle').addEventListener('click', () => this.toggleMapLayer('googleSat'));
+        document.getElementById('esri-toggle').addEventListener('click', () => this.toggleMapLayer('esriSat'));
         document.getElementById('terrain-toggle').addEventListener('click', () => this.toggleMapLayer('terrain'));
         document.getElementById('street-toggle').addEventListener('click', () => this.toggleMapLayer('street'));
 
@@ -91,14 +92,7 @@ class DivergentSystem {
         document.getElementById('database-search').addEventListener('input', (e) => this.searchDatabase(e.target.value));
 
         // Chat functionality
-        const sendBtn = document.getElementById('send-message');
-        const messageInput = document.getElementById('message-input');
-        if (sendBtn && messageInput) {
-            sendBtn.addEventListener('click', () => this.sendMessage());
-            messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') this.sendMessage();
-            });
-        }
+        this.setupChatHandlers();
 
         // File uploads
         document.getElementById('file-upload').addEventListener('change', (e) => this.handleFileUpload(e));
@@ -202,35 +196,47 @@ class DivergentSystem {
 
         this.map = L.map('map').setView([55.7558, 37.6176], 10);
 
-        // Real working satellite imagery sources
+        // Military-grade satellite imagery sources
         this.satelliteLayers = {
             landsat9: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 attribution: 'Landsat-9 • 2024-01-15 • 30м/пиксель',
                 name: 'Landsat-9',
                 date: '2024-01-15',
                 resolution: '30м/пиксель',
-                maxZoom: 19
+                maxZoom: 19,
+                subdomains: ['server', 'services']
             }),
             sentinel2: L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_2022/GoogleMapsCompatible/{z}/{y}/{x}.jpg', {
                 attribution: 'Sentinel-2 • 2024-01-10 • 10м/пиксель',
                 name: 'Sentinel-2',
                 date: '2024-01-10',
                 resolution: '10м/пиксель',
-                maxZoom: 19
+                maxZoom: 19,
+                subdomains: ['tiles']
             }),
             maxar: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 attribution: 'Maxar • 2024-01-20 • 50см/пиксель',
                 name: 'Maxar',
                 date: '2024-01-20',
                 resolution: '50см/пиксель',
-                maxZoom: 20
+                maxZoom: 20,
+                subdomains: ['server', 'services']
             }),
             googleSat: L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
                 attribution: 'Google Satellite • 2024-01-25 • 15м/пиксель',
                 name: 'Google Satellite',
                 date: '2024-01-25',
                 resolution: '15м/пиксель',
-                maxZoom: 20
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            }),
+            esriSat: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Esri Satellite • 2024-01-22 • 25м/пиксель',
+                name: 'Esri Satellite',
+                date: '2024-01-22',
+                resolution: '25м/пиксель',
+                maxZoom: 19,
+                subdomains: ['server', 'services']
             })
         };
 
@@ -331,6 +337,12 @@ class DivergentSystem {
                 this.updateSatelliteInfo('googleSat');
                 document.getElementById('google-toggle').classList.add('active');
                 break;
+            case 'esriSat':
+                this.satelliteLayers.esriSat.addTo(this.map);
+                this.currentLayer = 'esriSat';
+                this.updateSatelliteInfo('esriSat');
+                document.getElementById('esri-toggle').classList.add('active');
+                break;
             case 'street':
                 this.streetLayer.addTo(this.map);
                 this.currentLayer = 'street';
@@ -364,6 +376,9 @@ class DivergentSystem {
                 break;
             case 'googleSat':
                 info = this.satelliteLayers.googleSat.options;
+                break;
+            case 'esriSat':
+                info = this.satelliteLayers.esriSat.options;
                 break;
             case 'street':
                 info = this.streetLayer.options;
@@ -701,6 +716,35 @@ class DivergentSystem {
     }
 
     // Chat Functions
+    setupChatHandlers() {
+        // Setup chat event listeners when tab is activated
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('[data-tab="chats"]')) {
+                setTimeout(() => this.attachChatListeners(), 100);
+            }
+        });
+    }
+
+    attachChatListeners() {
+        const sendBtn = document.getElementById('send-message');
+        const messageInput = document.getElementById('message-input');
+        
+        if (sendBtn && messageInput) {
+            // Remove existing listeners to avoid duplicates
+            sendBtn.removeEventListener('click', this.sendMessageHandler);
+            messageInput.removeEventListener('keypress', this.messageKeyHandler);
+            
+            // Add new listeners
+            this.sendMessageHandler = () => this.sendMessage();
+            this.messageKeyHandler = (e) => {
+                if (e.key === 'Enter') this.sendMessage();
+            };
+            
+            sendBtn.addEventListener('click', this.sendMessageHandler);
+            messageInput.addEventListener('keypress', this.messageKeyHandler);
+        }
+    }
+
     sendMessage() {
         const messageInput = document.getElementById('message-input');
         const message = messageInput.value.trim();

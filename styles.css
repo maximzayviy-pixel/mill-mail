@@ -19,28 +19,32 @@
     --bg-accent: #001a1a;
     --bg-military: #0d1b0d;
     --bg-panel: #1e1e1e;
+    --bg-dark: #0f0f0f;
     
     --text-primary: #ffffff;
     --text-secondary: #cccccc;
     --text-muted: #888888;
     --text-accent: #00ff41;
     --text-warning: #ffaa00;
+    --text-dim: #666666;
     
     --border-color: #333333;
     --border-accent: #00ff41;
     --border-military: #2d4a2d;
     --border-subtle: #444444;
+    --border-dark: #222222;
     
     --shadow-color: rgba(0, 255, 65, 0.3);
     --glow-color: rgba(0, 255, 65, 0.5);
     --military-glow: rgba(0, 191, 255, 0.4);
-    --panel-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    --panel-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    --deep-shadow: 0 4px 16px rgba(0, 0, 0, 0.9);
     
     --font-primary: 'Rajdhani', sans-serif;
     --font-mono: 'Orbitron', monospace;
-    --font-size-small: 0.875rem;
-    --font-size-normal: 1rem;
-    --font-size-large: 1.125rem;
+    --font-size-small: 0.75rem;
+    --font-size-normal: 0.875rem;
+    --font-size-large: 1rem;
 }
 
 body {
@@ -347,13 +351,14 @@ body {
 
 /* Header */
 .system-header {
-    background: var(--bg-secondary);
-    border-bottom: 2px solid var(--border-accent);
-    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+    border-bottom: 1px solid var(--border-dark);
+    padding: 0.75rem 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 2px 20px var(--shadow-color);
+    box-shadow: var(--deep-shadow);
+    min-height: 60px;
 }
 
 .header-left .system-logo {
@@ -555,61 +560,67 @@ body {
 }
 
 .map-btn {
-    background: var(--bg-panel);
-    border: 1px solid var(--border-subtle);
-    border-radius: 4px;
-    padding: 8px 12px;
-    color: var(--text-secondary);
+    background: var(--bg-dark);
+    border: 1px solid var(--border-dark);
+    border-radius: 2px;
+    padding: 6px 10px;
+    color: var(--text-dim);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     font-size: var(--font-size-small);
-    font-weight: 500;
-    min-width: 80px;
+    font-weight: 400;
+    min-width: 70px;
     justify-content: center;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .map-btn:hover {
     border-color: var(--primary-color);
     color: var(--text-primary);
-    background: var(--bg-tertiary);
+    background: var(--bg-secondary);
 }
 
 .map-btn.active {
     border-color: var(--primary-color);
     background: var(--primary-color);
     color: var(--bg-primary);
-    box-shadow: 0 0 10px var(--shadow-color);
+    box-shadow: 0 0 8px var(--shadow-color);
+    font-weight: 600;
 }
 
 .map-info {
     position: absolute;
     bottom: 20px;
     left: 20px;
-    background: var(--bg-panel);
-    border: 1px solid var(--border-subtle);
-    border-radius: 6px;
-    padding: 12px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-dark);
+    border-radius: 2px;
+    padding: 10px;
     z-index: 1000;
-    box-shadow: var(--panel-shadow);
-    min-width: 250px;
+    box-shadow: var(--deep-shadow);
+    min-width: 220px;
+    font-family: var(--font-mono);
 }
 
 .coordinates {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 3px;
     font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-size: var(--font-size-small);
     color: var(--primary-color);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
 }
 
 .satellite-info {
-    border-top: 1px solid var(--border-military);
-    padding-top: 1rem;
+    border-top: 1px solid var(--border-dark);
+    padding-top: 0.75rem;
 }
 
 .satellite-name,
@@ -617,25 +628,27 @@ body {
 .resolution {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 0.5rem;
+    gap: 6px;
+    margin-bottom: 0.4rem;
     font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--text-accent);
+    font-size: var(--font-size-small);
+    color: var(--text-dim);
 }
 
 .satellite-name i,
 .image-date i,
 .resolution i {
     color: var(--accent-color);
-    width: 12px;
+    width: 10px;
     text-align: center;
+    font-size: 0.7rem;
 }
 
 .satellite-name span,
 .image-date span,
 .resolution span {
-    color: var(--text-primary);
+    color: var(--text-secondary);
+    font-weight: 400;
 }
 
 /* Chats Styles */

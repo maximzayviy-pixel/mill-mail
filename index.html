@@ -23,7 +23,7 @@
                 <div class="loading-bar">
                     <div class="loading-progress"></div>
                 </div>
-                <div class="loading-text">Загрузка системы разведки...</div>
+                <div class="loading-text">Инициализация боевых модулей...</div>
             </div>
     </div>
 
@@ -91,15 +91,15 @@
                 <div class="status-indicators">
                     <div class="status-item">
                         <i class="fas fa-satellite"></i>
-                        <span>Спутник: Landsat-9</span>
+                        <span>SAT: Landsat-9</span>
                     </div>
                     <div class="status-item">
                         <i class="fas fa-shield-alt"></i>
-                        <span>Шифрование: AES-256</span>
+                        <span>ENC: AES-256</span>
                     </div>
                     <div class="status-item">
                         <i class="fas fa-database"></i>
-                        <span>БД: Синхронизирована</span>
+                        <span>DB: SYNC</span>
                     </div>
                     <div class="status-item">
                         <i class="fas fa-clock"></i>
@@ -111,10 +111,10 @@
             <div class="header-right">
                 <div class="user-info">
                     <i class="fas fa-user-shield"></i>
-                    <span>Оператор-аналитик</span>
+                    <span>OP-001</span>
                 </div>
                 <div class="clearance-level">
-                    <span class="clearance-badge">ДОСТУП 3</span>
+                    <span class="clearance-badge">LVL-3</span>
                 </div>
                 <button id="logout-btn" class="btn-logout">
                     <i class="fas fa-sign-out-alt"></i>
@@ -126,23 +126,23 @@
         <nav class="system-nav">
             <div class="nav-item active" data-tab="map">
                 <i class="fas fa-satellite"></i>
-                <span>Разведка</span>
+                <span>INTEL</span>
             </div>
             <div class="nav-item" data-tab="chats">
                 <i class="fas fa-broadcast-tower"></i>
-                <span>Командование</span>
+                <span>COMM</span>
             </div>
             <div class="nav-item" data-tab="scanner">
                 <i class="fas fa-crosshairs"></i>
-                <span>Анализ</span>
+                <span>ANALYZE</span>
             </div>
             <div class="nav-item" data-tab="compass">
                 <i class="fas fa-location-arrow"></i>
-                <span>Навигация</span>
+                <span>NAV</span>
             </div>
             <div class="nav-item" data-tab="database">
                 <i class="fas fa-database"></i>
-                <span>Архив</span>
+                <span>ARCHIVE</span>
             </div>
         </nav>
 
@@ -168,6 +168,10 @@
                         <button class="map-btn" id="google-toggle">
                             <i class="fas fa-satellite"></i>
                             Google
+                        </button>
+                        <button class="map-btn" id="esri-toggle">
+                            <i class="fas fa-satellite"></i>
+                            Esri
                         </button>
                         <button class="map-btn" id="terrain-toggle">
                             <i class="fas fa-mountain"></i>
@@ -206,7 +210,7 @@
                 <div class="chats-container">
                     <div class="chats-sidebar">
                         <div class="chats-header">
-                            <h3>Командные каналы</h3>
+                            <h3>COMM CHANNELS</h3>
                             <button class="btn-new-chat">
                                 <i class="fas fa-plus"></i>
                             </button>
@@ -399,15 +403,15 @@
             <div id="database-tab" class="tab-content">
                 <div class="database-container">
                     <div class="database-header">
-                        <h3>Архив разведданных</h3>
+                        <h3>INTEL ARCHIVE</h3>
                         <div class="database-actions">
                             <button class="btn-database" id="upload-database">
                                 <i class="fas fa-upload"></i>
-                                Импорт
+                                IMPORT
                             </button>
                             <button class="btn-database" id="export-database">
                                 <i class="fas fa-download"></i>
-                                Экспорт
+                                EXPORT
                             </button>
                         </div>
                     </div>
@@ -415,24 +419,24 @@
                     <div class="database-main">
                         <div class="database-search">
                             <div class="search-box">
-                                <input type="text" id="database-search" placeholder="Поиск целей...">
+                                <input type="text" id="database-search" placeholder="SEARCH TARGETS...">
                                 <i class="fas fa-search"></i>
                             </div>
                             <div class="search-filters">
                                 <select id="filter-type">
-                                    <option value="all">Все типы</option>
-                                    <option value="military">Военные объекты</option>
-                                    <option value="infrastructure">Инфраструктура</option>
-                                    <option value="personnel">Персонал</option>
-                                    <option value="vehicle">Транспорт</option>
+                                    <option value="all">ALL TYPES</option>
+                                    <option value="military">MILITARY</option>
+                                    <option value="infrastructure">INFRASTRUCTURE</option>
+                                    <option value="personnel">PERSONNEL</option>
+                                    <option value="vehicle">VEHICLES</option>
                                 </select>
                             </div>
                         </div>
                         
                         <div class="database-results">
                             <div class="results-header">
-                                <span>Найдено: <span id="results-count">0</span> целей</span>
-                                <span class="priority-indicator">Приоритет: <span class="priority-high">Высокий</span></span>
+                                <span>TARGETS: <span id="results-count">0</span></span>
+                                <span class="priority-indicator">PRIORITY: <span class="priority-high">HIGH</span></span>
                             </div>
                             <div class="results-list" id="database-results">
                                 <div class="result-item">
@@ -440,11 +444,11 @@
                                         <i class="fas fa-crosshairs"></i>
                                     </div>
                                     <div class="result-content">
-                                        <div class="result-title">Военный объект "Альфа"</div>
-                                        <div class="result-subtitle">ID: MIL-001 | Статус: Под наблюдением</div>
+                                        <div class="result-title">TARGET-ALPHA</div>
+                                        <div class="result-subtitle">ID: MIL-001 | STATUS: MONITORING</div>
                                         <div class="result-tags">
-                                            <span class="tag military">Военный объект</span>
-                                            <span class="tag priority">Высокий приоритет</span>
+                                            <span class="tag military">MILITARY</span>
+                                            <span class="tag priority">HIGH PRIORITY</span>
                                         </div>
                                     </div>
                                     <div class="result-actions">
