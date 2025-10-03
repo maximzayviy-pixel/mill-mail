@@ -194,6 +194,48 @@
                             Улицы
                         </button>
                     </div>
+                    <div class="target-filters">
+                        <div class="filter-header">
+                            <h4>TARGET FILTERS</h4>
+                            <button class="btn-clear-filters" id="clear-filters">
+                                <i class="fas fa-times"></i>
+                                CLEAR
+                            </button>
+                        </div>
+                        <div class="filter-options">
+                            <div class="filter-group">
+                                <label>Тип объекта:</label>
+                                <div class="filter-checkboxes">
+                                    <label><input type="checkbox" class="filter-checkbox" data-type="military" checked> ВЧ</label>
+                                    <label><input type="checkbox" class="filter-checkbox" data-type="industry" checked> ВПК</label>
+                                    <label><input type="checkbox" class="filter-checkbox" data-type="bridge" checked> Мосты</label>
+                                    <label><input type="checkbox" class="filter-checkbox" data-type="admin" checked> Админ</label>
+                                    <label><input type="checkbox" class="filter-checkbox" data-type="airfield" checked> Аэродромы</label>
+                                    <label><input type="checkbox" class="filter-checkbox" data-type="command" checked> ПУ</label>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label>Приоритет:</label>
+                                <div class="filter-checkboxes">
+                                    <label><input type="checkbox" class="filter-checkbox" data-priority="CRITICAL" checked> CRITICAL</label>
+                                    <label><input type="checkbox" class="filter-checkbox" data-priority="HIGH" checked> HIGH</label>
+                                    <label><input type="checkbox" class="filter-checkbox" data-priority="MEDIUM" checked> MEDIUM</label>
+                                    <label><input type="checkbox" class="filter-checkbox" data-priority="LOW" checked> LOW</label>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label>Классификация:</label>
+                                <div class="filter-checkboxes">
+                                    <label><input type="checkbox" class="filter-checkbox" data-classification="TOP SECRET" checked> TOP SECRET</label>
+                                    <label><input type="checkbox" class="filter-checkbox" data-classification="SECRET" checked> SECRET</label>
+                                    <label><input type="checkbox" class="filter-checkbox" data-classification="CONFIDENTIAL" checked> CONFIDENTIAL</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-stats">
+                            <span>Показано: <span id="visible-targets">0</span> из <span id="total-targets">0</span></span>
+                        </div>
+                    </div>
                     <div class="military-panel">
                         <div class="radar-display">
                             <div class="radar-header">
