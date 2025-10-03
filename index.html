@@ -106,6 +106,18 @@
                         <span id="current-time">00:00:00</span>
                     </div>
                 </div>
+                <div class="military-status">
+                    <div class="threat-level">
+                        <span class="threat-label">THREAT LEVEL:</span>
+                        <span class="threat-indicator" id="threat-level">LOW</span>
+                    </div>
+                    <div class="radar-status">
+                        <div class="radar-icon">
+                            <i class="fas fa-broadcast-tower"></i>
+                        </div>
+                        <span>RADAR: ACTIVE</span>
+                    </div>
+                </div>
             </div>
             
             <div class="header-right">
@@ -181,6 +193,43 @@
                             <i class="fas fa-road"></i>
                             Улицы
                         </button>
+                    </div>
+                    <div class="military-panel">
+                        <div class="radar-display">
+                            <div class="radar-header">
+                                <h4>RADAR SCAN</h4>
+                                <div class="radar-status-indicator">
+                                    <span class="status-dot active"></span>
+                                    <span>ACTIVE</span>
+                                </div>
+                            </div>
+                            <div class="radar-screen">
+                                <div class="radar-sweep"></div>
+                                <div class="target-dot" style="top: 30%; left: 40%;"></div>
+                                <div class="target-dot" style="top: 60%; left: 70%;"></div>
+                                <div class="target-dot" style="top: 20%; left: 80%;"></div>
+                            </div>
+                        </div>
+                        <div class="alert-panel">
+                            <div class="alert-header">
+                                <h4>ALERTS</h4>
+                                <span class="alert-count">3</span>
+                            </div>
+                            <div class="alert-list">
+                                <div class="alert-item high">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>HIGH: Unidentified aircraft detected</span>
+                                </div>
+                                <div class="alert-item medium">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>MED: Weather conditions changing</span>
+                                </div>
+                                <div class="alert-item low">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>LOW: System maintenance required</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="map-info">
                         <div class="coordinates">
@@ -267,7 +316,7 @@
                             <div class="message system">
                                 <div class="message-content">
                                     <i class="fas fa-info-circle"></i>
-                                    <span>Система ДИВЕРГЕНТ инициализирована • Уровень доступа: 3</span>
+                                    <span>СИСТЕМА ДИВЕРГЕНТ ИНИЦИАЛИЗИРОВАНА • УРОВЕНЬ ДОСТУПА: 3 • ШИФРОВАНИЕ: AES-256</span>
                                 </div>
                                 <div class="message-time">12:34:15</div>
                             </div>
@@ -277,8 +326,12 @@
                                 </div>
                                 <div class="message-content">
                                     <div class="message-header">
-                                        <span class="message-sender">Центр управления</span>
+                                        <span class="message-sender">ЦЕНТР УПРАВЛЕНИЯ</span>
                                         <span class="message-time">12:34:20</span>
+                                        <span class="encryption-status">
+                                            <i class="fas fa-lock"></i>
+                                            <span>ENCRYPTED</span>
+                                        </span>
                                     </div>
                                     <div class="message-text">Все боевые модули загружены. Спутниковая разведка активна. Ожидаю ваших команд.</div>
                                 </div>
@@ -287,6 +340,10 @@
                                 <div class="message-content">
                                     <div class="message-text">Подтверждаю. Начинаю анализ спутниковых данных. Landsat-9 показывает отличное качество снимков.</div>
                                     <div class="message-time">12:34:25</div>
+                                    <div class="encryption-status">
+                                        <i class="fas fa-lock"></i>
+                                        <span>ENCRYPTED</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -445,10 +502,15 @@
                                     </div>
                                     <div class="result-content">
                                         <div class="result-title">TARGET-ALPHA</div>
-                                        <div class="result-subtitle">ID: MIL-001 | STATUS: MONITORING</div>
+                                        <div class="result-subtitle">ID: MIL-001 | STATUS: MONITORING | CLASSIFICATION: SECRET</div>
                                         <div class="result-tags">
                                             <span class="tag military">MILITARY</span>
                                             <span class="tag priority">HIGH PRIORITY</span>
+                                            <span class="tag classification">SECRET</span>
+                                        </div>
+                                        <div class="result-details">
+                                            <span class="detail-item">COORD: 55.7558°N, 37.6176°E</span>
+                                            <span class="detail-item">LAST UPDATE: 2024-01-15 12:34:25</span>
                                         </div>
                                     </div>
                                     <div class="result-actions">
@@ -457,6 +519,38 @@
                                         </button>
                                         <button class="btn-action">
                                             <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-icon">
+                                        <i class="fas fa-plane"></i>
+                                    </div>
+                                    <div class="result-content">
+                                        <div class="result-title">AIRCRAFT-BRAVO</div>
+                                        <div class="result-subtitle">ID: AER-002 | STATUS: TRACKING | CLASSIFICATION: TOP SECRET</div>
+                                        <div class="result-tags">
+                                            <span class="tag aircraft">AIRCRAFT</span>
+                                            <span class="tag priority">CRITICAL</span>
+                                            <span class="tag classification">TOP SECRET</span>
+                                        </div>
+                                        <div class="result-details">
+                                            <span class="detail-item">COORD: 55.7522°N, 37.6156°E</span>
+                                            <span class="detail-item">LAST UPDATE: 2024-01-15 12:35:10</span>
+                                        </div>
+                                    </div>
+                                    <div class="result-actions">
+                                        <button class="btn-action">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action">
+                                            <i class="fas fa-download"></i>
                                         </button>
                                     </div>
                                 </div>

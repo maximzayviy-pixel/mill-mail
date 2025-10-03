@@ -160,6 +160,93 @@ class DivergentSystem {
         this.initializeMap();
         this.initializeCompass();
         this.startCompassSimulation();
+        this.initializeMilitaryFeatures();
+    }
+
+    // Military Features
+    initializeMilitaryFeatures() {
+        this.threatLevels = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+        this.currentThreatLevel = 0;
+        this.startThreatLevelRotation();
+        this.startRadarAnimation();
+        this.startAlertSystem();
+    }
+
+    startThreatLevelRotation() {
+        setInterval(() => {
+            const threatElement = document.getElementById('threat-level');
+            if (threatElement) {
+                this.currentThreatLevel = (this.currentThreatLevel + 1) % this.threatLevels.length;
+                const newLevel = this.threatLevels[this.currentThreatLevel];
+                threatElement.textContent = newLevel;
+                
+                // Update threat level styling
+                threatElement.className = 'threat-indicator';
+                if (newLevel === 'HIGH' || newLevel === 'CRITICAL') {
+                    threatElement.style.background = 'var(--danger-color)';
+                } else if (newLevel === 'MEDIUM') {
+                    threatElement.style.background = 'var(--warning-color)';
+                } else {
+                    threatElement.style.background = 'var(--success-color)';
+                }
+            }
+        }, 10000); // Change every 10 seconds
+    }
+
+    startRadarAnimation() {
+        // Radar animation is handled by CSS, but we can add dynamic targets
+        setInterval(() => {
+            const radarScreen = document.querySelector('.radar-screen');
+            if (radarScreen) {
+                // Randomly add/remove target dots
+                const existingDots = radarScreen.querySelectorAll('.target-dot');
+                if (existingDots.length < 5 && Math.random() > 0.7) {
+                    const newDot = document.createElement('div');
+                    newDot.className = 'target-dot';
+                    newDot.style.top = Math.random() * 80 + 10 + '%';
+                    newDot.style.left = Math.random() * 80 + 10 + '%';
+                    radarScreen.appendChild(newDot);
+                }
+            }
+        }, 5000);
+    }
+
+    startAlertSystem() {
+        const alerts = [
+            { level: 'high', text: 'HIGH: Unidentified aircraft detected', icon: 'exclamation-triangle' },
+            { level: 'medium', text: 'MED: Weather conditions changing', icon: 'info-circle' },
+            { level: 'low', text: 'LOW: System maintenance required', icon: 'check-circle' },
+            { level: 'high', text: 'HIGH: Suspicious activity detected', icon: 'exclamation-triangle' },
+            { level: 'medium', text: 'MED: Communication link unstable', icon: 'info-circle' },
+            { level: 'low', text: 'LOW: Backup systems online', icon: 'check-circle' }
+        ];
+
+        setInterval(() => {
+            const alertList = document.querySelector('.alert-list');
+            if (alertList && Math.random() > 0.8) {
+                const randomAlert = alerts[Math.floor(Math.random() * alerts.length)];
+                const alertItem = document.createElement('div');
+                alertItem.className = `alert-item ${randomAlert.level}`;
+                alertItem.innerHTML = `
+                    <i class="fas fa-${randomAlert.icon}"></i>
+                    <span>${randomAlert.text}</span>
+                `;
+                
+                // Remove oldest alert if more than 5
+                const existingAlerts = alertList.querySelectorAll('.alert-item');
+                if (existingAlerts.length >= 5) {
+                    existingAlerts[0].remove();
+                }
+                
+                alertList.appendChild(alertItem);
+                
+                // Update alert count
+                const alertCount = document.querySelector('.alert-count');
+                if (alertCount) {
+                    alertCount.textContent = alertList.children.length;
+                }
+            }
+        }, 15000);
     }
 
     handleLogout() {
